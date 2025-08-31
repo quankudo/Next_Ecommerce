@@ -1,8 +1,12 @@
-import AboutTabs from '@/components/AboutTabs'
+import AboutTabs from '@/app/about/AboutTabs'
+import BlogPreviewCard from '@/components/BlogPreviewCard'
+import CategoryTitle from '@/components/CategoryTitle'
 import SectionTitle from '@/components/SectionTitle'
-import { Armchair, Bath, Check } from 'lucide-react'
+import { Armchair, ArrowRight, Bath, Check } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
+import FeaturesList from './FeaturesList'
 
 const AboutPage = () => {
   return (
@@ -49,10 +53,27 @@ const AboutPage = () => {
       </div>
       <div className='px-32'>
         <span className='inline-block px-6 py-1 border-1 border-black rounded-2xl'>Nội Thất Bền Bỉ 100%</span>
-        <h4 className='text-4xl leading-normal my-7'>Sản Xuất Nội Thất Đẹp Mắt <br />
+        <h4 className='text-3xl leading-normal my-7'>Sản Xuất Nội Thất Đẹp Mắt <br />
           Cho Doanh Nghiệp Của Bạn
         </h4>
         <AboutTabs />
+      </div>
+      <FeaturesList/>
+      {/* New Blog */}
+      <div className="px-32 mt-14">
+        <CategoryTitle title="Bài Viết Mới Nhất"/>
+        <div className="grid grid-cols-4 gap-5">
+          <BlogPreviewCard />
+          <BlogPreviewCard />
+          <BlogPreviewCard />
+          <BlogPreviewCard />
+        </div>
+        <div className="flex justify-center mt-8">
+          <Link href={'/'} 
+            className="flex items-center gap-2 bg-black text-white px-10 py-3 w-[max-content]">
+            Xem tất cả <ArrowRight/>
+          </Link>
+        </div>
       </div>
     </div>
   )
