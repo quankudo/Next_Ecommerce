@@ -20,14 +20,14 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 bg-white z-10 shadow flex items-center gap-10 px-32 py-5">
-      <div>
+      <Link href={'/'}>
         <Image
           src="https://smartfurniture.monamedia.net/wp-content/uploads/2024/11/logo.svg"
           width={120}
           height={60}
           alt="logo"
         />
-      </div>
+      </Link>
       <div className="flex justify-between items-center flex-1">
         <nav className="flex items-center gap-8">
           {navItems.map((item) => (

@@ -1,8 +1,12 @@
+import { Provider } from 'react-redux'
+import { store } from '@/redux/store'
 import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { ReduxProvider } from '@/redux/ReduxProvider';
 
 const workSans = Work_Sans({
   subsets: ["latin"], // hoặc ["latin", "vietnamese"] nếu cần
@@ -25,9 +29,12 @@ export default function RootLayout({
       <body
         className={`${workSans.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <ReduxProvider>
+          <Header />
+            {children}
+        </ReduxProvider>
+          <Footer />
+          <ScrollToTopButton />
       </body>
     </html>
   );
