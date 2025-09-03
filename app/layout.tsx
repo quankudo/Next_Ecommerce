@@ -1,5 +1,4 @@
-import { Provider } from 'react-redux'
-import { store } from '@/redux/store'
+import { Toaster, toast } from 'sonner'
 import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
 import "./globals.css";
@@ -29,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${workSans.variable} antialiased`}
       >
+        <Toaster richColors position="top-right" />
         <ReduxProvider>
           <Header />
             {children}

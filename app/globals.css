@@ -21,3 +21,32 @@
 body {
   font-family: var(--font-work-sans);
 }
+
+.product-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 20%;
+  height: 250%;
+  background: linear-gradient(
+    120deg, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(255, 255, 255, 0.6) 50%,  /* tăng opacity */
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  transform: rotate(25deg);
+  transition: all 0.7s ease;
+  pointer-events: none;
+  filter: blur(3px);  /* blur để sáng mượt */
+  z-index: 5;          /* đảm bảo trên ảnh */
+}
+
+.product-card:hover::before {
+  left: 125%;
+}

@@ -29,7 +29,7 @@ const ProductCard = () => {
   };
   return (
     <div
-      className='shadow rounded relative group overflow-hidden'>
+      className='shadow rounded relative group overflow-hidden product-card'>
         {/* handle click cart-heart-eye */}
         <div className='flex flex-col gap-3 absolute top-3 right-3
           transform -translate-y-10 opacity-0

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { removeFromWishlist } from "@/redux/wishlistSlice";
+import Empty from "@/components/ui/Empty";
 
 // Mock data (giả sử là dữ liệu từ backend)
 const productData = [
@@ -51,9 +52,12 @@ const Page = () => {
       <SectionTitle title="Wishlist" />
       <div className="px-32">
         {wishProducts.length === 0 ? (
-          <p className="text-center mt-10 text-gray-500">
-            Danh sách yêu thích đang trống 😢
-          </p>
+          <Empty
+            title="Danh sách yêu thích trống"
+            description="Bạn chưa thêm sản phẩm nào vào danh sách yêu thích."
+            actionLabel="Khám phá sản phẩm"
+            actionHref="/shop"
+          />
         ) : (
           <table className="w-full mt-14 border border-gray-300 border-collapse">
             <tbody>
