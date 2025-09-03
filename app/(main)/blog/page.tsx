@@ -1,6 +1,4 @@
 import SectionTitle from '@/components/SectionTitle'
-import { CircleUserRound, MessageCircleMore } from 'lucide-react'
-import Image from 'next/image'
 import React from 'react'
 import BlogItem from './BlogItem'
 import BlogAside from './BlogAside'

@@ -3,9 +3,7 @@ import { Facebook, MessageCircle, Minus, Plus, Star, Twitter } from 'lucide-reac
 import ProductImages from './ProductImages ';
 import ProductDescription from './ProductDescription';
 import ListProduct from '@/components/ListProduct';
-import Link from 'next/link';
 import ScoreStar from '@/components/ScoreStar';
-import Button from '@/components/ui/Button';
 import AddToCart from './AddToCart';
 
 const listImage = [

@@ -1,4 +1,4 @@
-import AboutTabs from '@/app/about/AboutTabs'
+import AboutTabs from '@/app/(main)/about/AboutTabs'
 import BlogPreviewCard from '@/components/BlogPreviewCard'
 import CategoryTitle from '@/components/CategoryTitle'
 import SectionTitle from '@/components/SectionTitle'
