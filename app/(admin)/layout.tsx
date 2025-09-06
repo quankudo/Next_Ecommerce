@@ -14,10 +14,12 @@ import {
   ChevronRight,
   ChevronLeft,
   LogOut,
+  BriefcaseBusiness,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NotificationList from "@/components/notifications/NotificationList";
+import SettingsDropdown from "@/components/admin/SettingsDropdown";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -25,8 +27,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   const menuItems = [
-  { icon: <LayoutDashboard size={20} />, label: "Dashboard", href: "/admin" },
+  { icon: <LayoutDashboard size={20} />, label: "Dashboard", href: "/admin/dashboard" },
   { icon: <Users size={20} />, label: "Users", href: "/admin/users" },
+  { icon: <BriefcaseBusiness size={20} />, label: "Employees", href: "/admin/employees" },
   { icon: <Package size={20} />, label: "Products", href: "/admin/products" },
   { icon: <Layers size={20} />, label: "Categories", href: "/admin/categories" },
   { icon: <ShoppingCart size={20} />, label: "Orders", href: "/admin/orders" },
@@ -91,7 +94,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 setIsOpenBell={setIsOpenBell}
               />
             </div>
-            <Settings className="w-5 h-5 text-black" strokeWidth={1}/>
+            <SettingsDropdown />
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gray-300"></div>
               <span className="text-sm font-medium">Admin User</span>
@@ -100,7 +103,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Main */}
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4">{children}</main>
       </div>
     </div>
   );

@@ -1,6 +1,13 @@
 import Button from '@/components/ui/Button'
 import React from 'react'
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Thông tin cá nhân | MyShop",
+  description: "Cập nhật thông tin cá nhân của bạn",
+};
+
 const UpdateProfileForm = () => {
     return (
         <div>
@@ -38,7 +45,7 @@ const UpdateProfileForm = () => {
                 defaultValue="Chưa có"
                 />
             </div>
-            <Button text="Cập nhật" isSubmit={true}/>
+            <Button text="Cập nhật" isSubmit={true} isWidthFull={true}/>
             </form>
         </div>
     )

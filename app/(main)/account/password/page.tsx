@@ -1,5 +1,15 @@
 import Button from '@/components/ui/Button'
+import { Metadata } from 'next';
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "Đổi mật khẩu | MyShop",
+  description: "Thay đổi mật khẩu để bảo mật tài khoản.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const ChangePasswordForm = () => {
   return (
