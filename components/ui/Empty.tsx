@@ -17,9 +17,9 @@ export default function Empty({
   actionHref = "/",
 }: EmptyProps) {
   return (
-    <div className="flex h-[70vh] flex-col items-center justify-center text-center">
-      <Inbox className="w-16 h-16 black mb-4" strokeWidth={1.5} />
-      <h2 className="text-2xl font-semibold">
+    <div className="flex flex-col items-center justify-center text-center w-full">
+      <Inbox className="w-10 h-10 black mb-4" strokeWidth={1} />
+      <h2 className="text-xl font-medium">
         {title}
       </h2>
       <p className="text-black mt-2">{description}</p>

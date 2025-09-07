@@ -24,6 +24,7 @@ import SectionHeading from "@/components/admin/SectionHeading";
 import { createPortal } from "react-dom";
 import AddCategoryForm from "./AddCategoryForm";
 import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 // ---- Kiểu dữ liệu ----
 export type Category = {
@@ -56,15 +57,26 @@ function SortableCategoryItem({ item, isOverlay = false, setCategory }: { item: 
     setCategory(item);
   };
 
-  const handleClickDelete = () => {
+  const handleClickDelete = (id: string, name: string) => {
     Swal.fire({
-      title: "Bạn có chắc muốn xóa?",
+      title: `Bạn có chắc muốn xóa danh mục ${name}?`,
       text: "Hành động này không thể hoàn tác!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
-    });
+    }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        // await axios.delete(`/api/categories/${id}`);
+        toast.success(`Danh mục "${name}" đã được xóa thành công!`);
+      } catch (error: any) {
+        toast.error(
+          error.response?.data?.message || `Không thể xóa danh mục "${name}"`
+        );
+      }
+    }
+  });
   };
 
   return (
@@ -121,7 +133,7 @@ function SortableCategoryItem({ item, isOverlay = false, setCategory }: { item: 
             text-sm flex items-center gap-1">
           <Edit strokeWidth={1} className="w-4 h-4"/> Cập nhật
         </button>
-        <button onClick={()=> handleClickDelete()}
+        <button onClick={()=> handleClickDelete(item.id, item.name)}
           className="cursor-pointer px-3 py-1 rounded bg-red-200 text-red-700
             text-sm flex items-center gap-1">
           <Trash strokeWidth={1} className="w-4 h-4"/> Xóa

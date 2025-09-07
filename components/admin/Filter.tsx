@@ -27,7 +27,7 @@ const Filter = ({currentShow, search, setSearch}: {currentShow: number, search: 
             </select>
             </div>
 
-            <div className="flex items-center gap-2 bg-gray-100 rounded px-4 py-3">
+            <div className="flex items-center gap-2 bg-gray-100 rounded px-4 py-2">
             <input
                 type="text"
                 value={search}
@@ -35,7 +35,7 @@ const Filter = ({currentShow, search, setSearch}: {currentShow: number, search: 
                 setSearch(e.target.value);
                 router.push(`?page=1`); // reset về trang 1
                 }}
-                className="outline-none bg-transparent"
+                className="outline-none bg-transparent placeholder:text-sm"
                 placeholder="Tìm kiếm"
             />
             <Search size={20} strokeWidth={1} />

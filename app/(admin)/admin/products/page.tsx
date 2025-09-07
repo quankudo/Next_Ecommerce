@@ -6,6 +6,8 @@ import { Edit, Trash, Plus, Eye } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
+import Swal from "sweetalert2";
+import Link from "next/link";
 
 const Page = () => {
   const products = [
@@ -24,6 +26,17 @@ const Page = () => {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
+
+  const handleClickDelete = (id: number) => {
+    Swal.fire({
+      title: "Bạn có chắc muốn xóa?",
+      text: "Hành động này không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    });
+  };
 
   // Filter product
   const filteredProducts = useMemo(() => {
@@ -47,9 +60,9 @@ const Page = () => {
       <div className="mt-5 p-4 rounded bg-white">
         {/* Action buttons */}
         <div className="flex items-center gap-3">
-          <button className="flex items-center px-2 text-[12px] font-medium cursor-pointer py-1 rounded bg-blue-200 text-blue-700">
+          <Link href={'/admin/products/create'} className="flex items-center px-2 text-[12px] font-medium cursor-pointer py-1 rounded bg-blue-200 text-blue-700">
             <Plus className="w-4 h-4" strokeWidth={1}/>Thêm sản phẩm
-          </button>
+          </Link>
           <button className="flex items-center px-2 text-[12px] font-medium cursor-pointer py-1 rounded bg-yellow-200 text-yellow-700">
             <Plus className="w-4 h-4" strokeWidth={1}/>Tải từ file
           </button>
@@ -108,11 +121,14 @@ const Page = () => {
                     <button className="text-blue-500 p-1 rounded cursor-pointer bg-blue-200">
                       <Eye size={18} />
                     </button>
-                    <button className="text-green-500 p-1 rounded cursor-pointer bg-green-200">
+                    <Link
+                      href={`/admin/products/${p.id}/edit`}
+                      className="text-green-500 p-1 rounded cursor-pointer bg-green-200 inline-flex items-center"
+                    >
                       <Edit size={18} />
-                    </button>
+                    </Link>
                     <button className="text-red-500 p-1 rounded cursor-pointer bg-red-200">
-                      <Trash size={18} />
+                      <Trash size={18} onClick={()=>handleClickDelete(p.id)} />
                     </button>
                   </td>
                 </tr>
