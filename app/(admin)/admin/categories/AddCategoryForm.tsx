@@ -5,7 +5,8 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Category } from "./page";
 
-export default function AddCategoryForm({ category }: { category: Category | null }) {
+export default function AddCategoryForm({ category, setCategory, handleUpdateSubmit }
+  : { category: Category | null, setCategory: React.Dispatch<React.SetStateAction<Category | null>>,handleUpdateSubmit:(cat:Category)=>void}) {
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -58,6 +59,7 @@ export default function AddCategoryForm({ category }: { category: Category | nul
   }
 
   const HandleClickCancle = () => {
+    setCategory(null);
     setForm({
       name: "",
       description: "",
@@ -82,11 +84,17 @@ export default function AddCategoryForm({ category }: { category: Category | nul
     }
 
     const url = category ? `/api/categories/${category.id}` : "/api/categories";
-    const method = category ? "PUT" : "POST";
 
-    const res = await fetch(url, { method, body: data });
-
-    if (res.ok) {
+    // const method = category ? "PUT" : "POST";
+    // const res = await fetch(url, { method, body: data });
+    if(category)
+      handleUpdateSubmit({id: category.id,imageUrl: previewUrl,displayOrder:5,name:form.name,slug:form.slug,status:'active',description:form.status});
+    else
+    {
+      handleUpdateSubmit({id: '0',imageUrl: previewUrl,displayOrder:5,name:form.name,slug:form.slug,status:'active',description:form.status});
+      HandleClickCancle();
+    }
+    if (true) {
       alert(category ? "Cập nhật thành công!" : "Thêm danh mục thành công!");
     } else {
       alert("Có lỗi xảy ra!");
@@ -167,7 +175,7 @@ export default function AddCategoryForm({ category }: { category: Category | nul
       </div>
       <div className="flex justify-end mt-5 gap-3">
         <button className="px-6 py-2 bg-gray-200 text-gray-700" onClick={()=>HandleClickCancle()}>Hủy</button>
-        <Button text={category ? "Cập nhật" : "Thêm danh mục"} isSubmit />
+        <Button text={category?.name ? "Cập nhật" : "Thêm danh mục"} isSubmit />
       </div>
     </form>
   );

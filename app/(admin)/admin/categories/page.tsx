@@ -38,7 +38,8 @@ export type Category = {
 };
 
 // ---- Item có thể kéo thả ----
-function SortableCategoryItem({ item, isOverlay = false, setCategory }: { item: Category; isOverlay?: boolean, setCategory: React.Dispatch<React.SetStateAction<Category | null>> }) {
+function SortableCategoryItem({ item, isOverlay = false, setCategory, handleClickDelete }
+  : { item: Category; isOverlay?: boolean, setCategory: React.Dispatch<React.SetStateAction<Category | null>>, handleClickDelete:(id:string, name: string)=>void }) {
   const {
     attributes,
     listeners,
@@ -55,28 +56,6 @@ function SortableCategoryItem({ item, isOverlay = false, setCategory }: { item: 
 
   const handleClickUpdate = () => {
     setCategory(item);
-  };
-
-  const handleClickDelete = (id: string, name: string) => {
-    Swal.fire({
-      title: `Bạn có chắc muốn xóa danh mục ${name}?`,
-      text: "Hành động này không thể hoàn tác!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        // await axios.delete(`/api/categories/${id}`);
-        toast.success(`Danh mục "${name}" đã được xóa thành công!`);
-      } catch (error: any) {
-        toast.error(
-          error.response?.data?.message || `Không thể xóa danh mục "${name}"`
-        );
-      }
-    }
-  });
   };
 
   return (
@@ -129,12 +108,12 @@ function SortableCategoryItem({ item, isOverlay = false, setCategory }: { item: 
       </div>
       <div className="flex gap-3">
         <button onClick={()=> handleClickUpdate()}
-          className="cursor-pointer px-3 py-1 rounded bg-blue-200 text-blue-700 
+          className="cursor-pointer px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200
             text-sm flex items-center gap-1">
           <Edit strokeWidth={1} className="w-4 h-4"/> Cập nhật
         </button>
         <button onClick={()=> handleClickDelete(item.id, item.name)}
-          className="cursor-pointer px-3 py-1 rounded bg-red-200 text-red-700
+          className="cursor-pointer px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200
             text-sm flex items-center gap-1">
           <Trash strokeWidth={1} className="w-4 h-4"/> Xóa
         </button>
@@ -226,6 +205,35 @@ export default function CategorySortBoard() {
     setActiveItem(null);
   }
 
+  const handleClickDelete = (id: string, name: string) => {
+    Swal.fire({
+      title: `Bạn có chắc muốn xóa danh mục ${name}?`,
+      text: "Hành động này không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        // await axios.delete(`/api/categories/${id}`);
+        toast.success(`Danh mục "${name}" đã được xóa thành công!`);
+        setItems((prev)=> prev.filter((cat)=>cat.id!==id));
+      } catch (error: any) {
+        toast.error(
+          error.response?.data?.message || `Không thể xóa danh mục "${name}"`
+        );
+      }
+    }
+  });
+  };
+
+  const handleUpdateSubmit=(cat:Category)=>{
+    if(cat.id!=='0')
+      setItems((prev)=>prev.map((ca)=>ca.id===cat.id?cat:ca))
+    else setItems([...items,cat])
+  };
+
   return (
     <div className="">
       <SectionHeading text="Quản lý danh mục" />
@@ -240,7 +248,7 @@ export default function CategorySortBoard() {
             <SortableContext items={filtered.map((x) => x.id)} strategy={verticalListSortingStrategy}>
               <div className="grid gap-3 flex-1">
                 {filtered.map((item) => (
-                  <SortableCategoryItem key={item.id} item={item} setCategory={setCategory}/>
+                  <SortableCategoryItem key={item.id} item={item} setCategory={setCategory} handleClickDelete={handleClickDelete}/>
                 ))}
               </div>
             </SortableContext>
@@ -249,12 +257,12 @@ export default function CategorySortBoard() {
             {typeof window !== "undefined" &&
               createPortal(
                 <DragOverlay>
-                  {activeItem ? <SortableCategoryItem item={activeItem} isOverlay setCategory={setCategory}/> : null}
+                  {activeItem ? <SortableCategoryItem item={activeItem} isOverlay setCategory={setCategory} handleClickDelete={handleClickDelete}/> : null}
                 </DragOverlay>,
                 document.body
               )}
           </DndContext>
-          <AddCategoryForm category={category}/>
+          <AddCategoryForm category={category} handleUpdateSubmit={handleUpdateSubmit} setCategory={setCategory}/>
         </div>
       </div>
     </div>

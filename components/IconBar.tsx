@@ -70,7 +70,7 @@ const IconBar = () => {
             {user ? (
               <div className="flex flex-col">
                 <Link
-                  href={"/profile"}
+                  href={"/account/profile"}
                   className="text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 >
                   {user.name}

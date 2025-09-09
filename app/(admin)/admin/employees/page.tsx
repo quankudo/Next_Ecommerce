@@ -2,15 +2,17 @@
 
 import SectionHeading from "@/components/admin/SectionHeading";
 import Pagination from "@/components/ui/Pagination";
-import { Edit, Trash, UserPen } from "lucide-react";
+import { Plus, Edit, FileText, FileDown, Trash2, FileUp } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
 import Swal from "sweetalert2";
 import PermissionModal from "./PermissionModal";
+import EmployeeTable from "./EmployeeTable";
+import { toast } from "sonner";
+import ActionButtons from "@/components/admin/ActionButtons";
 
-
-  // Định nghĩa các quyền
+// Định nghĩa các quyền
 type PermissionAction = "R" | "C" | "U" | "D";
 
 // Danh sách module
@@ -68,7 +70,7 @@ const usersInit: User[] = [
     email: "thib@example.com",
     phone: "0987654321",
     city: "TP.HCM",
-    district: '',
+    district: "Đống Đa",
     status: "Inactive",
     permissions: defaultPermissions,
   },
@@ -78,7 +80,7 @@ const usersInit: User[] = [
     email: "vanc@example.com",
     phone: "0911222333",
     city: "Đà Nẵng",
-    district: '',
+    district: "Đống Đa",
     status: "Active",
     permissions: defaultPermissions,
   },
@@ -88,7 +90,7 @@ const usersInit: User[] = [
     email: "thid@example.com",
     phone: "0933444555",
     city: "Hải Phòng",
-    district: '',
+    district: "Đống Đa",
     status: "Active",
     permissions: defaultPermissions,
   },
@@ -98,7 +100,7 @@ const usersInit: User[] = [
     email: "vane@example.com",
     phone: "0955666777",
     city: "Cần Thơ",
-    district: '',
+    district: "Đống Đa",
     status: "Inactive",
     permissions: defaultPermissions,
   },
@@ -108,7 +110,7 @@ const usersInit: User[] = [
     email: "thif@example.com",
     phone: "0977888999",
     city: "Huế",
-    district: '',
+    district: "Đống Đa",
     status: "Active",
     permissions: defaultPermissions,
   },
@@ -118,7 +120,7 @@ const usersInit: User[] = [
     email: "vang@example.com",
     phone: "0909090909",
     city: "Quảng Ninh",
-    district: '',
+    district: "Đống Đa",
     status: "Inactive",
     permissions: defaultPermissions,
   },
@@ -140,6 +142,8 @@ const usersInit: User[] = [
     } else if (city === "Đà Nẵng") {
       setDistricts(["Hải Châu", "Thanh Khê", "Ngũ Hành Sơn"]);
     }
+    else 
+      setDistricts([]);
     setSelectedUser({ ...selectedUser, city: city })
   };
 
@@ -158,15 +162,33 @@ const usersInit: User[] = [
     );
   }, [users, search]);
 
-  const handleClickDelete = (id: number) => {
+  const handleClickDelete = (id: number, name: string) => {
     Swal.fire({
-      title: "Bạn có chắc muốn xóa?" + id,
+      title: `Bạn có chắc muốn xóa nhân viên ${id}-${name}?`,
       text: "Hành động này không thể hoàn tác!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
+    }).then(()=> {
+      toast.success("Xóa nhân viên thành công");
     });
+  };
+
+  const handleUpload = () => {
+    toast.success("Tải từ file thành công!");
+  };
+
+  const handleExportExcel = () => {
+    toast.success("Xuất Excel thành công!");
+  };
+
+  const handleExportPDF = () => {
+    toast.success("Xuất PDF thành công!");
+  };
+
+  const handleDeleteAll = () => {
+    toast.success("Xóa tất cả thành công!");
   };
 
   const handleClickEdit = (user: any) => {
@@ -197,6 +219,7 @@ const usersInit: User[] = [
 
   const handleClickUpdateAddress = () => {
     setIsShowAddress(!isShowAddress);
+    handleCityChange(selectedUser.city);
     if(cities.length > 0)
       return;
     setCities([
@@ -217,60 +240,53 @@ const usersInit: User[] = [
     <div>
       <SectionHeading text="Quản lý nhân viên" />
       <div className="mt-5 p-4 rounded bg-white">
+        <ActionButtons
+          actions={[
+            {
+              key: "create",
+              label: "Thêm nhân viên",
+              href: "/admin/employees/create",
+              icon: Plus,
+              className: "bg-blue-200 text-blue-700",
+            },
+            {
+              key: "upload",
+              label: "Tải từ file",
+              icon: FileUp,
+              className: "bg-yellow-200 text-yellow-700",
+              onClick: handleUpload,
+            },
+            {
+              key: "exportExcel",
+              label: "Xuất Excel",
+              icon: FileDown,
+              className: "bg-green-300 text-green-700",
+              onClick: handleExportExcel,
+            },
+            {
+              key: "exportPDF",
+              label: "Xuất PDF",
+              icon: FileText,
+              className: "bg-red-300 text-red-700",
+              onClick: handleExportPDF,
+            },
+            {
+              key: "deleteAll",
+              label: "Xóa tất cả",
+              icon: Trash2,
+              className: "bg-gray-300 text-gray-700",
+              onClick: handleDeleteAll,
+            },
+          ]}
+        />
+        <hr className="text-gray-300 my-4" />
         {/* Search & Filter */}
         <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-black text-left text-white">
-                <th className="py-3 px-3 font-normal">#</th>
-                <th className="py-3 px-3 font-normal">ID</th>
-                <th className="py-3 px-3 font-normal">Tên</th>
-                <th className="py-3 px-3 font-normal">Email</th>
-                <th className="py-3 px-3 font-normal">SĐT</th>
-                <th className="py-3 px-3 font-normal">Địa chỉ</th>
-                <th className="py-3 px-3 font-normal">Trạng thái</th>
-                <th className="py-3 px-3 text-center font-normal">Hành động</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedUsers.map((u, index) => (
-                <tr key={u.id} className={`hover:bg-gray-50 ${index % 2 === 0 && "bg-gray-100"}`}>
-                  <td className="px-3 py-3">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="px-3 py-3">{u.id}</td>
-                  <td className="px-3 py-3">{u.name}</td>
-                  <td className="px-3 py-3">{u.email}</td>
-                  <td className="px-3 py-3">{u.phone}</td>
-                  <td className="px-3 py-3">{`${u.district}/${u.city} `}</td>
-                  <td className="px-3 py-3">
-                    <span
-                      className={`px-2 py-1 rounded text-sm ${
-                        u.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {u.status}
-                    </span>
-                  </td>
-                  <td className="px-3 py-3 flex items-center justify-center gap-3">
-                    <button className="text-yellow-500" onClick={() => handleClickEdit(u)}>
-                      <UserPen size={18} />
-                    </button>
-                    <button className="text-blue-500">
-                      <Edit size={18} onClick={() => handleClickPermission(u)}/>
-                    </button>
-                    <button className="text-red-500" onClick={() => handleClickDelete(u.id)}>
-                      <Trash size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
+          <EmployeeTable handleClickDelete={handleClickDelete} handleClickEdit={handleClickEdit}
+            handleClickPermission={handleClickPermission} paginatedUsers={paginatedUsers}/>
           {/* Pagination */}
           <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
@@ -316,24 +332,26 @@ const usersInit: User[] = [
               <Edit className="w-5 h-5" onClick={handleClickUpdateAddress}/>
             </div>
             {
-              isShowAddress && cities &&
+              isShowAddress &&
               <select
                 name="city"
                 value={selectedUser?.city}
                 onChange={(e)=>handleCityChange(e.target.value)}
                 className="w-full border rounded px-3 py-2">
+                <option value="">--Chọn thành phố--</option>
                 {cities.map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             }
             {
-              isShowAddress && districts.length>0 && 
+              isShowAddress && 
               <select
                 name="district"
                 value={selectedUser?.district}
                 onChange={(e)=>setSelectedUser({ ...selectedUser, district: e.target.value })}
                 className="w-full border rounded px-3 py-2 mt-3">
+                <option value="">--Chọn quận/huyện--</option>
                 {districts.map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}

@@ -2,13 +2,17 @@
 
 import SectionHeading from "@/components/admin/SectionHeading";
 import Pagination from "@/components/ui/Pagination";
-import { Edit, Trash } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
+import UserTable, { User } from "./UserTable";
+import Swal from "sweetalert2";
+import { toast } from "sonner";
+import { FileDown, FileText, FileUp, Plus, Trash2 } from "lucide-react";
+import ActionButtons from "@/components/admin/ActionButtons";
 
 const Page = () => {
-  const users = [
+  const users: User[] = [
     { id: 1, name: "Nguyễn Văn A", email: "vana@example.com", phone: "0123456789", address: "Hà Nội", status: "Active" },
     { id: 2, name: "Trần Thị B", email: "thib@example.com", phone: "0987654321", address: "TP.HCM", status: "Inactive" },
     { id: 3, name: "Lê Văn C", email: "vanc@example.com", phone: "0911222333", address: "Đà Nẵng", status: "Active" },
@@ -23,6 +27,35 @@ const Page = () => {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
+
+  const handleUpload = () => {
+    toast.success("Tải từ file thành công!");
+  };
+
+  const handleExportExcel = () => {
+    toast.success("Xuất Excel thành công!");
+  };
+
+  const handleExportPDF = () => {
+    toast.success("Xuất PDF thành công!");
+  };
+
+  const handleDeleteAll = () => {
+    toast.success("Xóa tất cả thành công!");
+  };
+
+  const handleClickDelete = (id: number, name: string) => {
+    Swal.fire({
+      title: `Bạn có chắc muốn xóa người dùng ${id}-${name}?`,
+      text: "Hành động này không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    }).then(()=>{
+      toast.success("Xóa người dùng thành công");
+    });
+  };
 
   // Filter user
   const filteredUsers = useMemo(() => {
@@ -44,46 +77,52 @@ const Page = () => {
     <div>
       <SectionHeading text="Quản lý người dùng" />
       <div className="mt-5 p-4 rounded bg-white">
+        <ActionButtons
+          actions={[
+            {
+              key: "create",
+              label: "Thêm người dùng",
+              href: "/admin/users/create",
+              icon: Plus,
+              className: "bg-blue-200 text-blue-700",
+            },
+            {
+              key: "upload",
+              label: "Tải từ file",
+              icon: FileUp,
+              className: "bg-yellow-200 text-yellow-700",
+              onClick: handleUpload,
+            },
+            {
+              key: "exportExcel",
+              label: "Xuất Excel",
+              icon: FileDown,
+              className: "bg-green-300 text-green-700",
+              onClick: handleExportExcel,
+            },
+            {
+              key: "exportPDF",
+              label: "Xuất PDF",
+              icon: FileText,
+              className: "bg-red-300 text-red-700",
+              onClick: handleExportPDF,
+            },
+            {
+              key: "deleteAll",
+              label: "Xóa tất cả",
+              icon: Trash2,
+              className: "bg-gray-300 text-gray-700",
+              onClick: handleDeleteAll,
+            },
+          ]}
+        />
+        <hr className="text-gray-300 my-4" />
         {/* Search & Filter */}
         <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <table className="w-full">
-            <thead> 
-                <tr className="bg-black text-left text-white"> 
-                    <th className="py-3 px-3 font-normal">#</th> 
-                    <th className="py-3 px-3 font-normal">ID</th> 
-                    <th className="py-3 px-3 font-normal">Tên</th> 
-                    <th className="py-3 px-3 font-normal">Email</th> 
-                    <th className="py-3 px-3 font-normal">SĐT</th> 
-                    <th className="py-3 px-3 font-normal">Địa chỉ</th> 
-                    <th className="py-3 px-3 font-normal">Trạng thái</th> 
-                    <th className="py-3 px-3 text-center font-normal">Hành động</th> 
-                </tr> 
-            </thead>
-            <tbody>
-              {paginatedUsers.map((u, index) => (
-                <tr key={u.id} className={`hover:bg-gray-50 ${index % 2 === 0 && "bg-gray-100"}`}>
-                  <td className="px-3 py-3">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="px-3 py-3">{u.id}</td>
-                  <td className="px-3 py-3">{u.name}</td>
-                  <td className="px-3 py-3">{u.email}</td>
-                  <td className="px-3 py-3">{u.phone}</td>
-                  <td className="px-3 py-3">{u.address}</td>
-                  <td className="px-3 py-3">
-                    <span className={`px-2 py-1 rounded text-sm ${ u.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700" }`} >{u.status}</span>
-                    </td>
-                  <td className="px-3 py-3 flex items-center justify-center gap-2">
-                    <button className="text-blue-500 mr-2"><Edit size={18} /></button>
-                    <button className="text-red-500"><Trash size={18} /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <UserTable paginatedUsers={paginatedUsers} handleClickDelete={handleClickDelete}/>
 
           {/* Pagination */}
           <Pagination

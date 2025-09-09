@@ -73,7 +73,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             );
           })}
         </nav>
-        <button className="text-white absolute bottom-10 left-5 flex justify-center items-center gap-2 text-sm"><LogOut size={20}/> Đăng xuất</button>
+        <button className="text-white absolute bottom-10 left-5 flex justify-center 
+          items-center gap-2 text-sm cursor-pointer">
+          <LogOut size={20}/> Đăng xuất
+        </button>
       </div>
 
       {/* Content */}

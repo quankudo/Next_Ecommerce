@@ -1,6 +1,6 @@
 "use client";
 
-import { User, Lock, LogOut, Archive } from "lucide-react";
+import { User, Lock, LogOut, Archive, MapPinHouse } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,6 +11,7 @@ const listTab = [
   { title: "Thông tin cá nhân", pathName: "/account/profile", href: "/account/profile", icon: User },
   { title: "Đơn hàng", pathName: "/account/order", href: "/account/order/pending", icon: Archive },
   { title: "Đổi mật khẩu", pathName: "/account/password", href: "/account/password", icon: Lock },
+  { title: "Quản lý địa chỉ", pathName: "/account/address", href: "/account/address", icon: MapPinHouse },
 ];
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
