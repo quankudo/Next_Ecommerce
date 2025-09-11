@@ -5,7 +5,7 @@ interface WishlistState {
 }
 
 const initialState: WishlistState = {
-  items: ['1', '2', '3'],
+  items: ['7', '8', '9'],
 };
 
 const wishlistSlice = createSlice({
@@ -15,6 +15,9 @@ const wishlistSlice = createSlice({
     addToWishlist: (state, action: PayloadAction<string>) => {
       if (!state.items.includes(action.payload)) {
         state.items.push(action.payload);
+      }
+      else {
+        state.items = state.items.filter((id) => id !== action.payload);
       }
     },
     removeFromWishlist: (state, action: PayloadAction<string>) => {

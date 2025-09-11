@@ -3,8 +3,13 @@
 import { useState } from "react"
 import SectionTitle from "@/components/SectionTitle"
 import { ChevronDown } from "lucide-react"
-import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
+import { RootState } from "@/redux/store"
+import { useSelector } from "react-redux"
+import { formatCurrency } from "@/utils/format"
+import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
+import { toast } from "sonner"
 
 interface Address {
   id: number
@@ -26,8 +31,34 @@ const Page = () => {
   const [paymentStatus, setPaymentStatus] = useState('bank');
   const [isOpen, setIsOpen] = useState(false);
 
+  const items = useSelector((state: RootState) => state.cart.items); 
+  const totalCartPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
   const selectedAddress = addresses.find(addr => addr.id === selectedAddressId);
 
+  const router = useRouter();
+  const handleClickCancle = () => {
+     Swal.fire({
+      title: "Bạn không muốn thanh toán bây giờ à?",
+      text: "Bạn có thể quay lại giỏ hàng để xem hoặc chỉnh sửa đơn.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#aaa",
+      confirmButtonText: "Quay lại giỏ hàng",
+      cancelButtonText: "Tiếp tục thanh toán",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.back();
+      }
+    });
+  }
+
+  const handleClickPayment =() => {
+    // Call API
+    // Xóa giỏ hàng
+    toast.success('Đặt hàng thành công!');
+    router.push('/');
+  }
   return (
     <div>
       <SectionTitle title="Thanh Toán" />
@@ -104,21 +135,15 @@ const Page = () => {
                     <span className="font-medium">Tạm tính</span>
                 </div>
                 <div className="mt-4 flex flex-col">
+                  {items.map(item=>(
                     <div className="flex justify-between items-center border-t border-gray-300 py-4">
-                        <p className="text-sm">Bench Bade Ellery Leather Great Room Sofa  <span className="font-bold">x 1</span></p>
-                        <span className="text-sm">390,000₫</span>
+                      <p className="text-sm">{item.name}  <span className="font-bold">x {item.quantity}</span></p>
+                      <span className="text-sm">{formatCurrency(item.price)}</span>
                     </div>
-                    <div className="flex justify-between items-center border-t border-gray-300 py-4">
-                        <p className="text-sm">Bench Bade Ellery Leather Great Room Sofa  <span className="font-bold">x 1</span></p>
-                        <span className="text-sm">390,000₫</span>
-                    </div>
-                    <div className="flex justify-between items-center border-t border-gray-300 py-4">
-                        <p className="text-sm">Bench Bade Ellery Leather Great Room Sofa  <span className="font-bold">x 1</span></p>
-                        <span className="text-sm">390,000₫</span>
-                    </div>
+                  ))}
                 </div>
-                <p className="flex justify-between items-center text-sm border-t border-b mt-3 border-gray-300 py-4"><span className="font-medium">Tạm tính</span><span>1,420,000₫</span></p>
-                <p className="flex justify-between items-center text-xl mt-4"><span className="font-medium">Tổng</span><span>1,420,000₫</span></p>
+                <p className="flex justify-between items-center text-sm border-t border-b mt-3 border-gray-300 py-4"><span className="font-medium">Tạm tính</span><span>{formatCurrency(totalCartPrice)}</span></p>
+                <p className="flex justify-between items-center text-xl mt-4"><span className="font-medium">Tổng</span><span>{formatCurrency(totalCartPrice)}</span></p>
                 <div className="rounded p-4 bg-gray-100 mt-5">
                     <div className="flex items-center gap-3">
                         <input type="radio" 
@@ -152,7 +177,13 @@ const Page = () => {
                         Trả tiền mặt khi giao hàng.
                     </p>
                     <hr className="text-gray-400 my-4"/>
-                    <div className="flex justify-end"><Button text="ĐẶT HÀNG" /></div>
+                    <div className="flex justify-end gap-4">
+                      <button onClick={()=>handleClickCancle()}
+                        className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700">
+                        Quay lại
+                      </button>
+                      <Button text="ĐẶT HÀNG" event={handleClickPayment}/>
+                    </div>
                 </div>
             </div>
         </div>

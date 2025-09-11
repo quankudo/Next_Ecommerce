@@ -6,6 +6,7 @@ import SectionTitle from '@/components/SectionTitle'
 import Button from '@/components/ui/Button'
 import React from 'react'
 import CartItem from './CartItem'
+import Link from 'next/link'
 
 const page = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items)
@@ -47,7 +48,7 @@ const page = () => {
             <span className="font-medium">Tổng</span>
             <span>{(subtotal + shipping).toLocaleString()}₫</span>
           </p>
-          <Button text="Thanh Toán Ngay" />
+          <Link className='px-8 py-2 bg-black text-center mt-3 text-white cursor-pointer' href={'/checkout'}>Thanh Toán Ngay</Link>
         </div>
       </div>
     </div>

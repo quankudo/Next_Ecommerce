@@ -29,7 +29,7 @@ const listPromotion = [
 
 const PromotionCard = () => {
   return (
-    <div className="flex justify-between gap-8 px-32">
+    <div className="flex justify-between mt-14 gap-8 px-32">
       {listPromotion.map((item, index) => (
         <motion.div
           key={item.id}

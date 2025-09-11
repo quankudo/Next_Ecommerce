@@ -15,6 +15,9 @@ import {
   ChevronLeft,
   LogOut,
   BriefcaseBusiness,
+  FileText,
+  Gift,
+  Home,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,6 +35,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   { icon: <BriefcaseBusiness size={20} />, label: "Employees", href: "/admin/employees" },
   { icon: <Package size={20} />, label: "Products", href: "/admin/products" },
   { icon: <Layers size={20} />, label: "Categories", href: "/admin/categories" },
+  { icon: <FileText size={20} />, label: "Blogs", href: "/admin/blogs" },
+  { icon: <Gift size={20} />, label: "Promotions", href: "/admin/promotions" },
   { icon: <ShoppingCart size={20} />, label: "Orders", href: "/admin/orders" },
   { icon: <Star size={20} />, label: "Reviews", href: "/admin/reviews" },
   { icon: <Bell size={20} />, label: "Notifications", href: "/admin/notifications" },
@@ -84,14 +89,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Header */}
         <header className="h-14 bg-white shadow flex items-center justify-between px-6">
           <h1 className="font-semibold text-lg">Admin Panel</h1>
-          <div className="flex items-center gap-5">
-            <div className="relative cursor-pointer">
+          <div className="flex items-center gap-2">
+            <Link href={'/'} className="p-2 rounded-full hover:bg-gray-200">
+              <Home
+                className="w-5 h-5 text-black"
+                strokeWidth={1}
+              />
+            </Link>
+            <div className="relative cursor-pointer p-2 rounded-full hover:bg-gray-200">
               <Bell
                 className="w-5 h-5 text-black"
                 strokeWidth={1}
                 onClick={() => setIsOpenBell(!isOpenBell)}
               />
-              <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-black text-white flex justify-center items-center text-[9px]" />
+              <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-black text-white flex justify-center items-center text-[9px]" />
               <NotificationList
                 isOpenBell={isOpenBell}
                 setIsOpenBell={setIsOpenBell}

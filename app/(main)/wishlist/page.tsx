@@ -3,50 +3,31 @@
 import SectionTitle from "@/components/SectionTitle";
 import { X } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { removeFromWishlist } from "@/redux/wishlistSlice";
 import Empty from "@/components/ui/Empty";
-
-// Mock data (giả sử là dữ liệu từ backend)
-const productData = [
-  {
-    id:'1',
-    name: "Dining Chair 0073 WF MG-01",
-    price: "180,000₫",
-    discount: "170,000₫",
-    createdAt: "31/08/2025",
-    imageUrl:
-      "https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/prod1-300x300.png",
-  },
-  {
-    id: '2',
-    name: "Lori Leather Otto man Site w/Tray",
-    price: "490,000₫",
-    discount: "390,000₫",
-    createdAt: "31/08/2025",
-    imageUrl:
-      "https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/mora-300x300.png",
-  },
-  {
-    id: '3',
-    name: "Leather Singint Tols In Canada Chair",
-    price: "280,000₫",
-    discount: "200,000₫",
-    createdAt: "31/08/2025",
-    imageUrl:
-      "https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/new-schair-300x300.png",
-  },
-];
+import { listProduct, Product } from "@/app/data";
+import { addItem } from "@/redux/cartSlice";
+import { toast } from "sonner";
 
 const Page = () => {
   const wishlist = useSelector((state: RootState) => state.wishlist.items);
   const dispatch = useDispatch();
 
   // Lọc sản phẩm có id nằm trong wishlist
-  const wishProducts = productData.filter((p) => wishlist.includes(p.id));
+  const wishProducts = listProduct.filter((p) => wishlist.includes(p.id+''));
 
+  const addToCart = (product: Product) => {
+    dispatch(addItem({
+      id: product.id+'',
+      name: product.name,
+      price: product.newPrice,
+      quantity: 1,
+      imageUrl: product.image
+    }));
+    toast.success('Thêm vào giỏ hàng thành công!');
+  }
   return (
     <div>
       <SectionTitle title="Wishlist" />
@@ -66,14 +47,14 @@ const Page = () => {
                   <td className="p-3 border border-gray-300 text-center w-[5%]">
                     <button
                       className="p-1 hover:text-red-500"
-                      onClick={() => dispatch(removeFromWishlist(item.id))}
+                      onClick={() => dispatch(removeFromWishlist(item.id+''))}
                     >
                       <X size={18} />
                     </button>
                   </td>
                   <td className="p-3 border border-gray-300 text-center w-[15%]">
                     <Image
-                      src={item.imageUrl}
+                      src={item.image}
                       alt={item.name}
                       width={100}
                       height={100}
@@ -85,21 +66,20 @@ const Page = () => {
                       <div>
                         <h5 className="font-medium">{item.name}</h5>
                         <p className="text-gray-500 text-sm">
-                          <span className="line-through mr-2">{item.price}</span>
+                          <span className="line-through mr-2">{item.newPrice}</span>
                           <span className="text-red-500 font-semibold">
-                            {item.discount}
+                            -{item.discount}%
                           </span>
                         </p>
                         <p className="text-xs text-gray-400">
-                          Ngày thêm: {item.createdAt}
+                          Ngày thêm: {'20/10/2025'}
                         </p>
                       </div>
-                      <Link
-                        href={`/product/${item.id}`}
+                      <button onClick={()=>addToCart(item)}
                         className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
                       >
                         Thêm vào giỏ hàng
-                      </Link>
+                      </button>
                     </div>
                   </td>
                 </tr>

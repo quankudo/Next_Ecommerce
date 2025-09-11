@@ -171,6 +171,7 @@ const usersInit: User[] = [
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
     }).then(()=> {
+      setUsers((prev)=>prev.filter((user)=>user.id!==id));
       toast.success("Xóa nhân viên thành công");
     });
   };
@@ -247,34 +248,34 @@ const usersInit: User[] = [
               label: "Thêm nhân viên",
               href: "/admin/employees/create",
               icon: Plus,
-              className: "bg-blue-200 text-blue-700",
+              className: "bg-blue-200 text-blue-700 hover:bg-blue-300",
             },
             {
               key: "upload",
               label: "Tải từ file",
               icon: FileUp,
-              className: "bg-yellow-200 text-yellow-700",
+              className: "bg-yellow-200 text-yellow-700 hover:bg-yellow-300",
               onClick: handleUpload,
             },
             {
               key: "exportExcel",
               label: "Xuất Excel",
               icon: FileDown,
-              className: "bg-green-300 text-green-700",
+              className: "bg-green-200 text-green-700 hover:bg-green-300",
               onClick: handleExportExcel,
             },
             {
               key: "exportPDF",
               label: "Xuất PDF",
               icon: FileText,
-              className: "bg-red-300 text-red-700",
+              className: "bg-red-200 text-red-700 hover:bg-red-300",
               onClick: handleExportPDF,
             },
             {
               key: "deleteAll",
               label: "Xóa tất cả",
               icon: Trash2,
-              className: "bg-gray-300 text-gray-700",
+              className: "bg-gray-200 text-gray-700 hover:bg-gray-300",
               onClick: handleDeleteAll,
             },
           ]}

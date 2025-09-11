@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EmployeeFormData, employeeSchema } from "@/schemas/employee";
 import SectionHeading from "@/components/admin/SectionHeading";
+import { toast } from "sonner";
 
 export default function AddEmployeeForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -66,8 +67,8 @@ export default function AddEmployeeForm() {
     payload.append("district", data.district);
     payload.append("phone", data.phone);
 
-    console.log("Submitting form (demo):");
-    for (const pair of payload.entries()) console.log(pair[0], pair[1]);
+    // Call Api thêm nhân viên
+    toast.success('Thêm nhân viên thành công!');
   }
 
   return (
@@ -174,7 +175,7 @@ export default function AddEmployeeForm() {
               reset();
               setImagePreview(null);
             }}
-            className="px-4 py-2 rounded-md border"
+            className="px-6 py-2 rounded hover:bg-gray-300 text-gray-700 bg-gray-200"
           >
             Hủy
           </button>

@@ -10,6 +10,8 @@ import PromotionCard from "@/components/home/PromotionCard";
 import SaleCard from "@/components/home/SaleCard";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { listProduct } from "../data";
+import ListSupplier from "@/components/home/ListSupplier";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -19,6 +21,16 @@ const fadeInUp = {
     transition: { duration: 0.8, ease: "easeOut" as const }
   }
 };
+
+const slideFromLeft = {
+  hidden: { opacity: 0, x: -100 },   // bắt đầu bên trái
+  visible: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { duration: 0.8, ease: "easeOut" as const } 
+  }
+};
+
 
 export default function Home() {
   return (
@@ -42,7 +54,6 @@ export default function Home() {
       >
         <Features />
       </motion.div>
-
       {/* SaleCard */}
       <SaleCard />
 
@@ -53,11 +64,8 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <ListProduct title="Bàn Ghế Hiện Đại" count={8} />
+        <ListProduct title="Máy giặt / Tủ lạnh" category="Máy giặt / Tủ lạnh"/>
       </motion.div>
-
-      {/* Promotion */}
-      <PromotionCard />
 
       {/* List Product 2 */}
       <motion.div
@@ -66,7 +74,20 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <ListProduct title="Tủ quần áo" count={8} />
+        <ListProduct title="Máy lọc nước / không khí" category="Máy lọc nước / không khí" />
+      </motion.div>
+
+      {/* Promotion */}
+      <PromotionCard />
+
+      {/* Các nhà cung cấp */}
+      <motion.div
+        variants={slideFromLeft}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <ListSupplier />
       </motion.div>
 
       {/* Blog Section */}

@@ -50,3 +50,18 @@ body {
 .product-card:hover::before {
   left: 125%;
 }
+
+@keyframes flyUp {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+}
+
+.animate-fly {
+  animation: flyUp 0.8s forwards;
+}
