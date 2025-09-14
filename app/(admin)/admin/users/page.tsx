@@ -5,22 +5,14 @@ import Pagination from "@/components/ui/Pagination";
 import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
-import UserTable, { User } from "./UserTable";
+import UserTable from "./UserTable";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { FileDown, FileText, FileUp, Plus, Trash2 } from "lucide-react";
 import ActionButtons from "@/components/admin/ActionButtons";
+import { listUsers } from "@/app/data";
 
 const Page = () => {
-  const users: User[] = [
-    { id: 1, name: "Nguyễn Văn A", email: "vana@example.com", phone: "0123456789", address: "Hà Nội", status: "Active" },
-    { id: 2, name: "Trần Thị B", email: "thib@example.com", phone: "0987654321", address: "TP.HCM", status: "Inactive" },
-    { id: 3, name: "Lê Văn C", email: "vanc@example.com", phone: "0911222333", address: "Đà Nẵng", status: "Active" },
-    { id: 4, name: "Phạm Thị D", email: "thid@example.com", phone: "0933444555", address: "Hải Phòng", status: "Active" },
-    { id: 5, name: "Hoàng Văn E", email: "vane@example.com", phone: "0955666777", address: "Cần Thơ", status: "Inactive" },
-    { id: 6, name: "Đỗ Thị F", email: "thif@example.com", phone: "0977888999", address: "Huế", status: "Active" },
-    { id: 7, name: "Bùi Văn G", email: "vang@example.com", phone: "0909090909", address: "Quảng Ninh", status: "Inactive" },
-  ];
   const [search, setSearch] = useState("");
 
   // 🔹 Lấy page từ URL
@@ -59,13 +51,13 @@ const Page = () => {
 
   // Filter user
   const filteredUsers = useMemo(() => {
-    return users.filter(
+    return listUsers.filter(
       (u) =>
         u.name.toLowerCase().includes(search.toLowerCase()) ||
         u.email.toLowerCase().includes(search.toLowerCase()) ||
         u.phone.includes(search)
     );
-  }, [users, search]);
+  }, [listUsers, search]);
 
   // Pagination
   const totalPages = Math.ceil(filteredUsers.length / currentShow);

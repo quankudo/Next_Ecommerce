@@ -33,7 +33,6 @@ const Filter = ({currentShow, search, setSearch}: {currentShow: number, search: 
                 value={search}
                 onChange={(e) => {
                 setSearch(e.target.value);
-                router.push(`?page=1`); // reset về trang 1
                 }}
                 className="outline-none bg-transparent placeholder:text-sm"
                 placeholder="Tìm kiếm"

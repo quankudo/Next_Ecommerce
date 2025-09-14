@@ -7,7 +7,8 @@ export const listProduct = [
     "newPrice": 790000,
     "discount": 20,
     "score": 4,
-    "category": "Bình đun / Ấm siêu tốc"
+    "category": "Bình đun / Ấm siêu tốc",
+    "quantity": 1
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@ export const listProduct = [
     "newPrice": 490000,
     "discount": 29,
     "score": 5,
-    "category": "Máy xay, ép"
+    "category": "Máy xay, ép",
+    "quantity": 1
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@ export const listProduct = [
     "newPrice": 990000,
     "discount": 23,
     "score": 4,
-    "category": "Nồi cơm điện"
+    "category": "Nồi cơm điện",
+    "quantity": 1
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@ export const listProduct = [
     "newPrice": 1790000,
     "discount": 18,
     "score": 5,
-    "category": "Máy xay, ép"
+    "category": "Máy xay, ép",
+    "quantity": 1
   },
   {
     "id": 5,
@@ -47,7 +51,8 @@ export const listProduct = [
     "newPrice": 690000,
     "discount": 22,
     "score": 4,
-    "category": "Đồ bếp khác"
+    "category": "Đồ bếp khác",
+    "quantity": 1
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@ export const listProduct = [
     "newPrice": 590000,
     "discount": 25,
     "score": 5,
-    "category": "Bình đun / Ấm siêu tốc"
+    "category": "Bình đun / Ấm siêu tốc",
+    "quantity": 1
   },
   {
     "id": 7,
@@ -67,7 +73,8 @@ export const listProduct = [
     "newPrice": 4790000,
     "discount": 20,
     "score": 5,
-    "category": "Máy lọc nước / không khí"
+    "category": "Máy lọc nước / không khí",
+    "quantity": 1
   },
   {
     "id": 8,
@@ -77,7 +84,8 @@ export const listProduct = [
     "newPrice": 490000,
     "discount": 29,
     "score": 4,
-    "category": "Quạt, điều hòa"
+    "category": "Quạt, điều hòa",
+    "quantity": 1
   },
   {
     "id": 9,
@@ -87,7 +95,8 @@ export const listProduct = [
     "newPrice": 290000,
     "discount": 26,
     "score": 4,
-    "category": "Đồ bếp khác"
+    "category": "Đồ bếp khác",
+    "quantity": 1
   },
   {
     "id": 10,
@@ -97,7 +106,8 @@ export const listProduct = [
     "newPrice": 450000,
     "discount": 24,
     "score": 4,
-    "category": "Đồ bếp khác"
+    "category": "Đồ bếp khác",
+    "quantity": 1
   },
   {
     "id": 11,
@@ -107,7 +117,8 @@ export const listProduct = [
     "newPrice": 2790000,
     "discount": 15,
     "score": 5,
-    "category": "Máy hút bụi / Robot"
+    "category": "Máy hút bụi / Robot",
+    "quantity": 1
   },
   {
     "id": 12,
@@ -117,7 +128,8 @@ export const listProduct = [
     "newPrice": 2190000,
     "discount": 19,
     "score": 5,
-    "category": "Nồi chiên, nồi áp suất"
+    "category": "Nồi chiên, nồi áp suất",
+    "quantity": 1
   },
   {
     "id": 13,
@@ -127,7 +139,8 @@ export const listProduct = [
     "newPrice": 6990000,
     "discount": 13,
     "score": 5,
-    "category": "Đồ bếp khác"
+    "category": "Đồ bếp khác",
+    "quantity": 1
   },
   {
     "id": 14,
@@ -137,7 +150,8 @@ export const listProduct = [
     "newPrice": 1390000,
     "discount": 18,
     "score": 4,
-    "category": "Lò nướng / Lò vi sóng"
+    "category": "Lò nướng / Lò vi sóng",
+    "quantity": 1
   },
   {
     "id": 15,
@@ -147,7 +161,8 @@ export const listProduct = [
     "newPrice": 5290000,
     "discount": 12,
     "score": 5,
-    "category": "Máy giặt / Tủ lạnh"
+    "category": "Máy giặt / Tủ lạnh",
+    "quantity": 1
   },
   {
     "id": 16,
@@ -157,7 +172,8 @@ export const listProduct = [
     "newPrice": 7590000,
     "discount": 11,
     "score": 5,
-    "category": "Máy giặt / Tủ lạnh"
+    "category": "Máy giặt / Tủ lạnh",
+    "quantity": 1
   },
   {
     "id": 17,
@@ -167,7 +183,8 @@ export const listProduct = [
     "newPrice": 1490000,
     "discount": 21,
     "score": 4,
-    "category": "Nồi chiên, nồi áp suất"
+    "category": "Nồi chiên, nồi áp suất",
+    "quantity": 1
   },
   {
     "id": 18,
@@ -177,7 +194,8 @@ export const listProduct = [
     "newPrice": 5190000,
     "discount": 13,
     "score": 5,
-    "category": "Máy lọc nước / không khí"
+    "category": "Máy lọc nước / không khí",
+    "quantity": 1
   },
   {
     "id": 19,
@@ -187,7 +205,8 @@ export const listProduct = [
     "newPrice": 7590000,
     "discount": 16,
     "score": 5,
-    "category": "Máy hút bụi / Robot"
+    "category": "Máy hút bụi / Robot",
+    "quantity": 1
   },
   {
     "id": 20,
@@ -197,7 +216,8 @@ export const listProduct = [
     "newPrice": 5890000,
     "discount": 16,
     "score": 5,
-    "category": "Máy lọc nước / không khí"
+    "category": "Máy lọc nước / không khí",
+    "quantity": 1
   }
 ];
 
@@ -215,5 +235,25 @@ export interface Product {
   newPrice: number;
   discount: number;
   score: number;
+  quantity: number;
   category: string; // thêm danh mục
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  status: "Active" | "Inactive";
+}
+
+export const listUsers: User[] = [
+    { id: 1, name: "Nguyễn Văn A", email: "vana@example.com", phone: "0123456789", address: "Hà Nội", status: "Active" },
+    { id: 2, name: "Trần Thị B", email: "thib@example.com", phone: "0987654321", address: "TP.HCM", status: "Inactive" },
+    { id: 3, name: "Lê Văn C", email: "vanc@example.com", phone: "0911222333", address: "Đà Nẵng", status: "Active" },
+    { id: 4, name: "Phạm Thị D", email: "thid@example.com", phone: "0933444555", address: "Hải Phòng", status: "Active" },
+    { id: 5, name: "Hoàng Văn E", email: "vane@example.com", phone: "0955666777", address: "Cần Thơ", status: "Inactive" },
+    { id: 6, name: "Đỗ Thị F", email: "thif@example.com", phone: "0977888999", address: "Huế", status: "Active" },
+    { id: 7, name: "Bùi Văn G", email: "vang@example.com", phone: "0909090909", address: "Quảng Ninh", status: "Inactive" },
+  ];

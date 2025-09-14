@@ -1,16 +1,7 @@
 import React from 'react'
 import { Edit, Trash } from "lucide-react";
 import Table from "@/components/ui/Table";
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  status: "Active" | "Inactive";
-}
-
+import { User } from '@/app/data';
 
 
 export default function UserTable({paginatedUsers, handleClickDelete}
