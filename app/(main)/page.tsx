@@ -12,6 +12,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { listProduct } from "../data";
 import ListSupplier from "@/components/home/ListSupplier";
+import Categories from "@/components/home/Categories";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -44,6 +45,9 @@ export default function Home() {
       >
         <Hero />
       </motion.div>
+
+      {/* List Category */}
+      <Categories />
 
       {/* Features */}
       <motion.div

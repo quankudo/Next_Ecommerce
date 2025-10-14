@@ -65,3 +65,42 @@ body {
 .animate-fly {
   animation: flyUp 0.8s forwards;
 }
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.tiptap ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.tiptap ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.tiptap li {
+  margin-top: 0.25rem;
+}
+
+/* Tăng dần khoảng lề cho danh sách lồng nhau */
+.tiptap ul ul,
+.tiptap ol ol {
+  margin-left: 1.5rem;
+}
+
+/* Khi thụt nhiều cấp, hiển thị bullet khác nhau (tùy chọn) */
+.tiptap ul ul {
+  list-style-type: circle;
+}
+.tiptap ul ul ul {
+  list-style-type: square;
+}
+
+.tiptap mark {
+    background-color: #faf594;
+    border-radius: 0.4rem;
+    box-decoration-break: clone;
+    padding: 0.1rem 0.3rem;
+  }

@@ -10,7 +10,7 @@ const ListProduct = () => {
     const [total, setTotal] = useState(0);
     const searchParams = useSearchParams();
     const currentPage = parseInt(searchParams.get("page") || "1", 10);
-    const currentShow = parseInt(searchParams.get("show") || "9", 10); 
+    const currentShow = parseInt(searchParams.get("show") || "12", 10); 
     useEffect(()=> {
         const start = (currentPage - 1) * currentShow;
         const end = start + currentShow;

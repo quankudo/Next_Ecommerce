@@ -5,6 +5,7 @@ import ProductDescription from './ProductDescription';
 import ListProduct from '@/components/ListProduct';
 import ScoreStar from '@/components/ScoreStar';
 import AddToCart from './AddToCart';
+import { listProduct } from '@/app/data';
 
 const listImage = [
   { id: 1, imageUrl: 'https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/pro-5-600x600.png' },
@@ -48,7 +49,7 @@ const Page = async ({ params }: { params: { id: string; slug: string } }) => {
         </div>
       </div>
       <ProductDescription />
-      <ListProduct title='Sản phẩm tương tự' count={4} />
+      <ListProduct title='Sản phẩm tương tự' listProducts={listProduct.slice(0, 4)}/>
     </div>
   );
 };

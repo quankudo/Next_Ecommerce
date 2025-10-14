@@ -24,9 +24,9 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-center items-center pt-16">
-      <div className="w-[450px]">
-        <h5 className="text-2xl mb-5">Đăng Ký Tài Khoản</h5>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100">
+      <div className="w-[450px] bg-white shadow-lg rounded-2xl px-8 py-10">
+        <h5 className="text-2xl font-medium text-center mb-5">Đăng Ký Tài Khoản</h5>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           {/* Name */}
@@ -102,7 +102,7 @@ const Page = () => {
             Bạn đã có tài khoản?{" "}
             <Link
               href="/login"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-red-600 hover:underline font-medium"
             >
               Đăng nhập
             </Link>

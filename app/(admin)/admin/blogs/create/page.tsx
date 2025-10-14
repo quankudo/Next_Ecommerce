@@ -2,6 +2,7 @@
 import SectionHeading from '@/components/admin/SectionHeading'
 import React, { useState } from 'react'
 import { Blog } from '@/types/blog'
+import TiptapEditor from '@/components/tiptap/TiptapEditor'
 
 const Page = () => {
   const [formData, setFormData] = useState<Partial<Blog>>({
@@ -212,12 +213,9 @@ const Page = () => {
           {/* Nội dung */}
           <div>
             <label className="block font-medium mb-1">Nội dung</label>
-            <textarea
-              rows={6}
-              className="w-full border rounded px-3 py-2"
-              placeholder="Nhập nội dung bài đăng..."
-              value={formData.desc}
-              onChange={e => handleChange('desc', e.target.value)}
+            <TiptapEditor
+              value={formData.desc || ""}
+              onChange={(val) => handleChange("desc", val)}
             />
           </div>
 

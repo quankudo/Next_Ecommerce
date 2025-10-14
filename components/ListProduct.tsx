@@ -3,8 +3,8 @@ import CategoryTitle from './CategoryTitle'
 import ProductCard from './ProductCard'
 import { listProduct, Product } from '@/app/data'
 
-const ListProduct = ({title, category}: {title: string, category: string}) => {
-  const products = listProduct.filter((item=>item.category===category));
+const ListProduct = ({title, category, listProducts}: {title: string, category?: string, listProducts?: Product[]}) => {
+  const products:Product[] = listProducts?.length ? listProducts : listProduct.filter((item=>item.category===category));
   return (
     <div className="px-32 pt-16">
         <CategoryTitle title={title}/>

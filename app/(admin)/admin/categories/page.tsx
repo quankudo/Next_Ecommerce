@@ -25,17 +25,8 @@ import { createPortal } from "react-dom";
 import AddCategoryForm from "./AddCategoryForm";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
+import { Category, listCategory } from "@/app/data";
 
-// ---- Kiểu dữ liệu ----
-export type Category = {
-  id: string;
-  name: string;
-  description?: string;
-  status: "active" | "inactive";
-  displayOrder: number;
-  imageUrl?: string;
-  slug: string;
-};
 
 // ---- Item có thể kéo thả ----
 function SortableCategoryItem({ item, isOverlay = false, setCategory, handleClickDelete }
@@ -124,48 +115,7 @@ function SortableCategoryItem({ item, isOverlay = false, setCategory, handleClic
 
 // ---- Component chính ----
 export default function CategorySortBoard() {
-  const [items, setItems] = useState<Category[]>([
-    {
-      id: "1",
-      name: "Nhà bếp",
-      description: "Đồ dùng nấu nướng, lưu trữ, ăn uống",
-      status: "active",
-      displayOrder: 1,
-      imageUrl:
-        "https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=300&q=80&auto=format&fit=crop",
-      slug: "nha-bep",
-    },
-    {
-      id: "2",
-      name: "Đồ điện gia dụng",
-      description: "Quạt, máy lọc, nồi chiên, máy hút bụi",
-      status: "active",
-      displayOrder: 2,
-      imageUrl:
-        "https://images.unsplash.com/photo-1586861203927-8007f44b1d9a?w=300&q=80&auto=format&fit=crop",
-      slug: "do-dien-gia-dung",
-    },
-    {
-      id: "3",
-      name: "Vệ sinh - Giặt ủi",
-      description: "Chổi, cây lau, bột giặt, kệ phơi",
-      status: "inactive",
-      displayOrder: 3,
-      imageUrl:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=300&q=80&auto=format&fit=crop",
-      slug: "ve-sinh-giat-ui",
-    },
-    {
-      id: "4",
-      name: "Nội thất",
-      description: "Bàn ghế, tủ kệ, trang trí",
-      status: "active",
-      displayOrder: 4,
-      imageUrl:
-        "https://images.unsplash.com/photo-1505691723518-36a5ac3b2d42?w=300&q=80&auto=format&fit=crop",
-      slug: "noi-that",
-    },
-  ]);
+  const [items, setItems] = useState<Category[]>(listCategory);
 
   const [activeItem, setActiveItem] = useState<Category | null>(null);
   const [search, setSearch] = useState("");

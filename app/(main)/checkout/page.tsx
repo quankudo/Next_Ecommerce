@@ -10,21 +10,7 @@ import { formatCurrency } from "@/utils/format"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 import { toast } from "sonner"
-
-interface Address {
-  id: number
-  name: string
-  phone: string
-  line1: string
-  line2: string
-  isDefault?: boolean
-}
-
-const addresses: Address[] = [
-  { id: 1, name: "Nguyễn Hữu Quân", phone: "0865 371 449", line1: "Đội 2 làng Linh Chiểu", line2: "Xã Triệu Sơn, Huyện Triệu Phong, Quảng Trị", isDefault: true },
-  { id: 2, name: "Nguyễn Văn A", phone: "0912 345 678", line1: "Phường 1", line2: "TP. Huế" },
-  { id: 3, name: "Trần Thị B", phone: "0987 654 321", line1: "Thôn 3", line2: "Huyện Phong Điền" },
-]
+import { addresses } from "@/app/data"
 
 const Page = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<number>(addresses[0].id);
@@ -136,7 +122,7 @@ const Page = () => {
                 </div>
                 <div className="mt-4 flex flex-col">
                   {items.map(item=>(
-                    <div className="flex justify-between items-center border-t border-gray-300 py-4">
+                    <div key={item.id} className="flex justify-between items-center border-t border-gray-300 py-4">
                       <p className="text-sm">{item.name}  <span className="font-bold">x {item.quantity}</span></p>
                       <span className="text-sm">{formatCurrency(item.price)}</span>
                     </div>

@@ -17,7 +17,9 @@ export default function UpdateProductPage() {
         height: 75,
         color: "Nâu",
         status: "Active",
-        images: [] as string[],
+        images: ['https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/sofa2-600x600.png',
+            'https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/pro-6-600x600.png'
+        ] as string[],
     };
 
 //   const handleSubmit = (e: React.FormEvent) => {

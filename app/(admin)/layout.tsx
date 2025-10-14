@@ -92,7 +92,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="h-14 py-8 sticky top-0 bg-white shadow flex items-center justify-between px-6">
+        <header className="h-14 py-8 sticky z-30 top-0 bg-white shadow flex items-center justify-between px-6">
           <h1 className="font-semibold text-lg">Admin Panel</h1>
           <div className="flex items-center gap-2">
             <Link href={'/'} className="p-2 rounded-full hover:bg-gray-200">

@@ -5,34 +5,9 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useDebounce } from "@/hook/useDebounce";
+import { listProduct, Product } from "@/app/data";
+import { formatCurrency } from "@/utils/format";
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl: string;
-}
-
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    name: "Sofa cao cấp",
-    price: 1200000,
-    imageUrl: "https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/sofa-1-600x600.png",
-  },
-  {
-    id: "2",
-    name: "Bàn gỗ tự nhiên",
-    price: 450000,
-    imageUrl: "https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/prod1-300x300.png",
-  },
-  {
-    id: "3",
-    name: "Ghế ăn hiện đại",
-    price: 180000,
-    imageUrl: "https://smartfurniture.monamedia.net/wp-content/uploads/2022/09/prod1-300x300.png",
-  },
-];
 
 const SearchBar = () => {
   const [query, setQuery] = useState("");
@@ -44,7 +19,7 @@ const SearchBar = () => {
   useEffect(() => {
     if (debouncedQuery.trim()) {
       // call API thật ở đây
-      const filtered = mockProducts.filter((p) =>
+      const filtered = listProduct.filter((p) =>
         p.name.toLowerCase().includes(debouncedQuery.toLowerCase())
       );
       setResults(filtered);
@@ -76,11 +51,11 @@ const SearchBar = () => {
             <Link
               key={item.id}
               href={`/product/${item.id}`}
-              className="flex items-center gap-3 p-2 hover:bg-gray-50 transition"
+              className="flex items-center gap-3 p-2 hover:bg-gray-100 transition"
               onClick={() => setIsOpen(false)}
             >
               <Image
-                src={item.imageUrl}
+                src={item.image}
                 alt={item.name}
                 width={40}
                 height={40}
@@ -88,7 +63,10 @@ const SearchBar = () => {
               />
               <div className="flex-1">
                 <p className="text-sm font-medium">{item.name}</p>
-                <p className="text-xs text-gray-500">{item.price.toLocaleString()} ₫</p>
+                <p className="flex gap-2 items-center">
+                  <span className="text-xs text-red-500 font-medium">{formatCurrency(item.newPrice)}</span>
+                  <span className="text-gray-500 text-sm line-through">{formatCurrency(item.oldPrice)}</span>
+                </p>
               </div>
             </Link>
           ))}

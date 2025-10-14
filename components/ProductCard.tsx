@@ -11,6 +11,8 @@ import { addItem } from "@/redux/cartSlice";
 import { addToWishlist } from "@/redux/wishlistSlice";
 import { Product } from '@/app/data'
 import { RootState } from '@/redux/store'
+import { toast } from 'sonner'
+import { formatCurrency } from '@/utils/format'
 
 const ProductCard = ({product}: {product:Product}) => {
   const dispatch = useDispatch();
@@ -45,11 +47,13 @@ const ProductCard = ({product}: {product:Product}) => {
         price: product.newPrice,
         quantity: 1,
         imageUrl: product.image
-      }
-    ));
+      }));
+      toast.success('Đã thêm vào giỏ hàng!')
     } else if (type === "wishlist") {
       dispatch(addToWishlist(product.id+''));
+      toast.success('Đã thêm vào danh sách yêu thích!')
     }
+    
   };
   return (
     <div
@@ -80,14 +84,14 @@ const ProductCard = ({product}: {product:Product}) => {
           <span className='absolute top-4 left-4 inline-block px-2 py-1 text-sm rounded text-white bg-black'>-{product.discount}%</span>
           <Image src={product.image} width={250} height={200} className='object-cover' alt=''/>
         </div>
-        <Link href={'/product/123/Bench-Astor-Oak-Rectangle-Dining-Table'} className='p-4'>
-            <ScoreStar score={4} />
-            <h5 className='text-black mt-1'>{product.name}</h5>
-            <hr className='text-gray-300 my-2' />
-            <div className='flex gap-4 items-center'>
-              <span className='line-through text-gray-600 text-sm'>{product.oldPrice}₫</span>
-              <span className='text-red-500 text-xl'>{product.newPrice}₫</span>
-            </div>
+        <Link href={'/product/123/Bench-Astor-Oak-Rectangle-Dining-Table'} className='block p-4'>
+          <ScoreStar score={Number(product.score)} />
+          <h5 className='text-black mt-1'>{product.name}</h5>
+          <hr className='text-gray-300 my-2' />
+          <div className='flex gap-4 items-center'>
+            <span className='line-through text-gray-600 text-sm'>{formatCurrency(product.oldPrice)}</span>
+            <span className='text-red-500 text-xl'>{formatCurrency(product.newPrice)}</span>
+          </div>
         </Link>
     </div>
   )
