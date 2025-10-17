@@ -6,20 +6,69 @@ import Pagination from "@/components/ui/Pagination";
 import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
-import Swal from "sweetalert2";
-import { toast } from "sonner";
 import OrderTable, { Order } from "./OrderTable";
 import ActionButtons from "@/components/admin/ActionButtons";
+import { usePagination } from "@/hook/usePagination";
+import { useActionHandler } from "@/hook/useActionHandler";
 
 const Page = () => {
+  const {
+    handleUpload,
+    handleExportExcel,
+    handleExportPDF,
+    handleDeleteAll,
+    handleClickDelete,
+  } = useActionHandler("đơn hàng");
   const orders: Order[] = [
-    { id: "DH001", customer: "Nguyễn Văn A", date: "2025-09-01", status: "Đang xử lý", total: 1500000 },
-    { id: "DH002", customer: "Trần Thị B", date: "2025-09-02", status: "Hoàn thành", total: 2500000 },
-    { id: "DH003", customer: "Lê Văn C", date: "2025-09-03", status: "Đã hủy", total: 500000 },
-    { id: "DH004", customer: "Phạm Thị D", date: "2025-09-04", status: "Chờ xác nhận", total: 1800000 },
-    { id: "DH005", customer: "Hoàng Văn E", date: "2025-09-05", status: "Hoàn thành", total: 3200000 },
-    { id: "DH006", customer: "Đỗ Thị F", date: "2025-09-06", status: "Đã hủy", total: 700000 },
-    { id: "DH007", customer: "Bùi Văn G", date: "2025-09-07", status: "Hoàn thành", total: 2200000 },
+    {
+      id: "DH001",
+      customer: "Nguyễn Văn A",
+      date: "2025-09-01",
+      status: "Đang xử lý",
+      total: 1500000,
+    },
+    {
+      id: "DH002",
+      customer: "Trần Thị B",
+      date: "2025-09-02",
+      status: "Hoàn thành",
+      total: 2500000,
+    },
+    {
+      id: "DH003",
+      customer: "Lê Văn C",
+      date: "2025-09-03",
+      status: "Đã hủy",
+      total: 500000,
+    },
+    {
+      id: "DH004",
+      customer: "Phạm Thị D",
+      date: "2025-09-04",
+      status: "Chờ xác nhận",
+      total: 1800000,
+    },
+    {
+      id: "DH005",
+      customer: "Hoàng Văn E",
+      date: "2025-09-05",
+      status: "Hoàn thành",
+      total: 3200000,
+    },
+    {
+      id: "DH006",
+      customer: "Đỗ Thị F",
+      date: "2025-09-06",
+      status: "Đã hủy",
+      total: 700000,
+    },
+    {
+      id: "DH007",
+      customer: "Bùi Văn G",
+      date: "2025-09-07",
+      status: "Hoàn thành",
+      total: 2200000,
+    },
   ];
 
   const [search, setSearch] = useState("");
@@ -29,37 +78,8 @@ const Page = () => {
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
 
-  const handleClickDelete = (id: string) => {
-    Swal.fire({
-      title: `Bạn có chắc muốn xóa đơn hàng ${id}?`,
-      text: "Hành động này không thể hoàn tác!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then(()=> {
-      toast.success(`Xóa đơn hàng ${id} thành công!`)
-    });
-  };
-
-  const handleUpload = () => {
-    toast.success("Tải từ file thành công!");
-  };
-
-  const handleExportExcel = () => {
-    toast.success("Xuất Excel thành công!");
-  };
-
-  const handleExportPDF = () => {
-    toast.success("Xuất PDF thành công!");
-  };
-
-  const handleDeleteAll = () => {
-    toast.success("Xóa tất cả thành công!");
-  };
-
   // Filter orders
-  const filteredOrders = useMemo(() => {
+  const filtered = useMemo(() => {
     return orders.filter(
       (o) =>
         o.id.toLowerCase().includes(search.toLowerCase()) ||
@@ -69,11 +89,11 @@ const Page = () => {
   }, [orders, search]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredOrders.length / currentShow);
-  const paginatedOrders = useMemo(() => {
-    const start = (currentPage - 1) * currentShow;
-    return filteredOrders.slice(start, start + currentShow);
-  }, [filteredOrders, currentShow, currentPage]);
+  const { paginatedData: paginatedOrders, totalPages } = usePagination(
+    filtered,
+    currentPage,
+    currentShow
+  );
 
   return (
     <div>
@@ -120,11 +140,18 @@ const Page = () => {
         />
         <hr className="text-gray-300 my-4" />
         {/* Search & Filter */}
-        <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
+        <Filter
+          currentShow={currentShow}
+          search={search}
+          setSearch={setSearch}
+        />
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <OrderTable handleClickDelete={handleClickDelete} paginatedOrders={paginatedOrders}/>
+          <OrderTable
+            handleClickDelete={handleClickDelete}
+            paginatedOrders={paginatedOrders}
+          />
 
           {/* Pagination */}
           <Pagination currentPage={currentPage} totalPages={totalPages} />

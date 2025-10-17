@@ -8,6 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
 import SectionHeading from "@/components/admin/SectionHeading";
 import { useDebounce } from "@/hook/useDebounce";
+import NotificationFilter from "./NotificationFilter";
+import { usePagination } from "@/hook/usePagination";
 
 export interface Notification {
   id: number;
@@ -61,7 +63,7 @@ const MOCK_NOTIFICATIONS: Notification[] = [
 ];
 
 const Page = () => {
-    const router = useRouter();
+  const router = useRouter();
   const [notifications, setNotifications] =
     useState<Notification[]>(MOCK_NOTIFICATIONS);
   const [statusFilter, setStatusFilter] = useState<"All" | "Read" | "Unread">(
@@ -81,79 +83,55 @@ const Page = () => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-    const [search, setSearch] = useState('');
-    const [debouncedSearch] = useDebounce(search, 500);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
 
-    useEffect(() => {
-        
-    }, [debouncedSearch]);
+  useEffect(() => {}, [debouncedSearch]);
 
-    const searchParams = useSearchParams();
-    const currentPage = parseInt(searchParams.get("page") || "1", 10);
-    const currentShow = parseInt(searchParams.get("show") || "5", 10);
+  const searchParams = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const currentShow = parseInt(searchParams.get("show") || "5", 10);
 
-    const filtered = useMemo(() => {
+  const filtered = useMemo(() => {
     return notifications.filter((n) => {
-        const byStatus =
+      const byStatus =
         statusFilter === "All" ? true : n.status === statusFilter;
-        const byType = typeFilter === "All" ? true : n.type === typeFilter;
-        return byStatus && byType;
+      const byType = typeFilter === "All" ? true : n.type === typeFilter;
+      return byStatus && byType;
     });
-    }, [notifications, statusFilter, typeFilter]);
+  }, [notifications, statusFilter, typeFilter]);
 
-    const totalPages = Math.ceil(filtered.length / currentShow);
-    const paginatedNotifications = useMemo(() => {
-        const start = (currentPage - 1) * currentShow;
-        return filtered.slice(start, start + currentShow);
-    }, [filtered, currentShow, currentPage]);
+  const { paginatedData: paginatedNotifications, totalPages } = usePagination(
+    filtered,
+    currentPage,
+    currentShow
+  );
 
   return (
     <div>
-        <SectionHeading text="Quản lý thông báo"/>
+      <SectionHeading text="Quản lý thông báo" />
 
-        <div className="p-4 bg-white rounded mt-4">
-            {/* Bộ lọc */}
-            <div className="flex flex-wrap gap-4 mb-4">
-                <select
-                value={statusFilter}
-                onChange={(e) =>
-                    setStatusFilter(e.target.value as "All" | "Read" | "Unread")
-                }
-                className="border rounded px-3 py-2"
-                >
-                <option value="All">Tất cả trạng thái</option>
-                <option value="Unread">Chưa đọc</option>
-                <option value="Read">Đã đọc</option>
-                </select>
+      <div className="p-4 bg-white rounded mt-4">
+        {/* Bộ lọc */}
+        <Filter currentShow={currentShow} search={search} setSearch={setSearch}>
+          <NotificationFilter
+            setStatusFilter={setStatusFilter}
+            setTypeFilter={setTypeFilter}
+            statusFilter={statusFilter}
+            typeFilter={typeFilter}
+          />
+        </Filter>
 
-                <select
-                value={typeFilter}
-                onChange={(e) =>
-                    setTypeFilter(
-                    e.target.value as "All" | "Order" | "Review" | "System" | "Promotion"
-                    )
-                }
-                className="border rounded px-3 py-2"
-                >
-                <option value="All">Tất cả loại</option>
-                <option value="Order">Đơn hàng</option>
-                <option value="Review">Bình luận</option>
-                <option value="System">Hệ thống</option>
-                <option value="Promotion">Khuyến mãi</option>
-                </select>
-            </div>
-
-            <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
-
-            {/* Bảng thông báo */}
-            <div className="overflow-x-auto mt-4">
-                <NotificationTable handleClickDelete={handleDelete} handleMarkRead={handleMarkRead} paginatedNotifications={paginatedNotifications}/>
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    />
-            </div>
+        {/* Bảng thông báo */}
+        <div className="overflow-x-auto mt-4">
+          <NotificationTable
+            handleClickDelete={handleDelete}
+            handleMarkRead={handleMarkRead}
+            paginatedNotifications={paginatedNotifications}
+          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
+      </div>
     </div>
   );
 };

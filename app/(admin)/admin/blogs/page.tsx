@@ -6,10 +6,10 @@ import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
 import BlogTable, { Blog } from "./BlogTable";
-import Swal from "sweetalert2";
-import { toast } from "sonner";
 import { FileDown, FileText, FileUp, Plus, Trash2 } from "lucide-react";
 import ActionButtons from "@/components/admin/ActionButtons";
+import { usePagination } from "@/hook/usePagination";
+import { useActionHandler } from "@/hook/useActionHandler";
 
 export const blogsInit: Blog[] = [
   {
@@ -123,7 +123,14 @@ export const blogsInit: Blog[] = [
 ];
 
 const Page = () => {
-    const [blogs, setBlogs] = useState<Blog[]>(blogsInit)
+  const {
+    handleUpload,
+    handleExportExcel,
+    handleExportPDF,
+    handleDeleteAll,
+    handleClickDelete,
+  } = useActionHandler("bài đăng");
+  const [blogs, setBlogs] = useState<Blog[]>(blogsInit);
   const [search, setSearch] = useState("");
 
   // 🔹 Lấy page từ URL
@@ -131,38 +138,8 @@ const Page = () => {
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
 
-  const handleUpload = () => {
-    toast.success("Tải từ file thành công!");
-  };
-
-  const handleExportExcel = () => {
-    toast.success("Xuất Excel thành công!");
-  };
-
-  const handleExportPDF = () => {
-    toast.success("Xuất PDF thành công!");
-  };
-
-  const handleDeleteAll = () => {
-    toast.success("Xóa tất cả thành công!");
-  };
-
-  const handleClickDelete = (id: number, name: string) => {
-    Swal.fire({
-      title: `Bạn có chắc muốn xóa bài đăng ${id}-${name}?`,
-      text: "Hành động này không thể hoàn tác!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then(()=>{
-        setBlogs((prev)=>prev.filter(item=>item.id!==id));
-      toast.success("Xóa bài đăng thành công");
-    });
-  };
-
   // Filter user
-  const filteredBlogs = useMemo(() => {
+  const filtered = useMemo(() => {
     return blogs.filter(
       (u) =>
         u.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -172,11 +149,11 @@ const Page = () => {
   }, [blogs, search]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredBlogs.length / currentShow);
-  const paginatedBlogs = useMemo(() => {
-    const start = (currentPage - 1) * currentShow;
-    return filteredBlogs.slice(start, start + currentShow);
-  }, [filteredBlogs, currentShow, currentPage]);
+  const { paginatedData: paginatedBlogs, totalPages } = usePagination(
+    filtered,
+    currentPage,
+    currentShow
+  );
   return (
     <div>
       <SectionHeading text="Quản lý bài đăng" />
@@ -222,17 +199,21 @@ const Page = () => {
         />
         <hr className="text-gray-300 my-4" />
         {/* Search & Filter */}
-        <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
+        <Filter
+          currentShow={currentShow}
+          search={search}
+          setSearch={setSearch}
+        />
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <BlogTable paginatedBlogs={paginatedBlogs} handleClickDelete={handleClickDelete}/>
+          <BlogTable
+            paginatedBlogs={paginatedBlogs}
+            handleClickDelete={handleClickDelete}
+          />
 
           {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       </div>
     </div>

@@ -6,20 +6,69 @@ import { Plus, FileText, FileDown, Trash2, FileUp } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
-import Swal from "sweetalert2";
 import ProductTable, { Product } from "./ProductTable";
-import { toast } from "sonner";
 import ActionButtons from "@/components/admin/ActionButtons";
+import { usePagination } from "@/hook/usePagination";
+import { useActionHandler } from "@/hook/useActionHandler";
 
 const Page = () => {
+  const {
+    handleUpload,
+    handleExportExcel,
+    handleExportPDF,
+    handleDeleteAll,
+    handleClickDelete,
+  } = useActionHandler("sản phẩm");
   const products: Product[] = [
-    { id: 1, name: "iPhone 15 Pro", price: 30000000, category: "Điện thoại", status: "Active" },
-    { id: 2, name: "MacBook Air M2", price: 25000000, category: "Laptop", status: "Inactive" },
-    { id: 3, name: "Chuột Logitech MX Master 3", price: 2500000, category: "Phụ kiện", status: "Active" },
-    { id: 4, name: "Tai nghe Sony WH-1000XM5", price: 8000000, category: "Tai nghe", status: "Active" },
-    { id: 5, name: "Màn hình LG UltraWide", price: 12000000, category: "Màn hình", status: "Inactive" },
-    { id: 6, name: "Bàn phím Keychron K2", price: 2200000, category: "Phụ kiện", status: "Active" },
-    { id: 7, name: "iPad Pro 12.9", price: 32000000, category: "Máy tính bảng", status: "Inactive" },
+    {
+      id: 1,
+      name: "iPhone 15 Pro",
+      price: 30000000,
+      category: "Điện thoại",
+      status: "Active",
+    },
+    {
+      id: 2,
+      name: "MacBook Air M2",
+      price: 25000000,
+      category: "Laptop",
+      status: "Inactive",
+    },
+    {
+      id: 3,
+      name: "Chuột Logitech MX Master 3",
+      price: 2500000,
+      category: "Phụ kiện",
+      status: "Active",
+    },
+    {
+      id: 4,
+      name: "Tai nghe Sony WH-1000XM5",
+      price: 8000000,
+      category: "Tai nghe",
+      status: "Active",
+    },
+    {
+      id: 5,
+      name: "Màn hình LG UltraWide",
+      price: 12000000,
+      category: "Màn hình",
+      status: "Inactive",
+    },
+    {
+      id: 6,
+      name: "Bàn phím Keychron K2",
+      price: 2200000,
+      category: "Phụ kiện",
+      status: "Active",
+    },
+    {
+      id: 7,
+      name: "iPad Pro 12.9",
+      price: 32000000,
+      category: "Máy tính bảng",
+      status: "Inactive",
+    },
   ];
 
   const [search, setSearch] = useState("");
@@ -28,35 +77,6 @@ const Page = () => {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
-
-  const handleUpload = () => {
-    toast.success("Tải từ file thành công!");
-  };
-
-  const handleExportExcel = () => {
-    toast.success("Xuất Excel thành công!");
-  };
-
-  const handleExportPDF = () => {
-    toast.success("Xuất PDF thành công!");
-  };
-
-  const handleDeleteAll = () => {
-    toast.success("Xóa tất cả thành công!");
-  };
-
-  const handleClickDelete = (id: number, name: string) => {
-    Swal.fire({
-      title: `Bạn có chắc muốn xóa sản phẩm ${id}-${name}?`,
-      text: "Hành động này không thể hoàn tác!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then(()=>{
-      toast.success("Xóa sản phẩm thành công");
-    });
-  };
 
   // Filter product
   const filteredProducts = useMemo(() => {
@@ -68,11 +88,11 @@ const Page = () => {
   }, [products, search]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredProducts.length / currentShow);
-  const paginatedProducts = useMemo(() => {
-    const start = (currentPage - 1) * currentShow;
-    return filteredProducts.slice(start, start + currentShow);
-  }, [filteredProducts, currentShow, currentPage]);
+  const { paginatedData: paginatedProducts, totalPages } = usePagination(
+    filteredProducts,
+    currentPage,
+    currentShow
+  );
 
   return (
     <div>
@@ -122,11 +142,18 @@ const Page = () => {
         <hr className="text-gray-300 my-4" />
 
         {/* Search & Filter */}
-        <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
+        <Filter
+          currentShow={currentShow}
+          search={search}
+          setSearch={setSearch}
+        />
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <ProductTable handleClickDelete={handleClickDelete} paginatedProducts={paginatedProducts}/>
+          <ProductTable
+            handleClickDelete={handleClickDelete}
+            paginatedProducts={paginatedProducts}
+          />
 
           {/* Pagination */}
           <Pagination currentPage={currentPage} totalPages={totalPages} />

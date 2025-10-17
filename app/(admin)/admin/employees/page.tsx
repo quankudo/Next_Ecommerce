@@ -9,8 +9,9 @@ import Filter from "@/components/admin/Filter";
 import Swal from "sweetalert2";
 import PermissionModal from "./PermissionModal";
 import EmployeeTable from "./EmployeeTable";
-import { toast } from "sonner";
 import ActionButtons from "@/components/admin/ActionButtons";
+import { usePagination } from "@/hook/usePagination";
+import { useActionHandler } from "@/hook/useActionHandler";
 
 // Định nghĩa các quyền
 type PermissionAction = "R" | "C" | "U" | "D";
@@ -33,104 +34,110 @@ export interface User {
   district: string;
   status: "Active" | "Inactive";
   permissions: Permissions;
-};
+}
 
 const Page = () => {
+  const {
+    handleUpload,
+    handleExportExcel,
+    handleExportPDF,
+    handleDeleteAll,
+    handleClickDelete,
+  } = useActionHandler("nhân viên");
+  // Danh sách mặc định quyền chỉ có Read
+  const defaultPermissions: Permissions = {
+    User: ["R"],
+    Order: ["R"],
+    Product: ["R"],
+    Category: ["R"],
+    Report: ["R"],
+  };
 
-// Danh sách mặc định quyền chỉ có Read
-const defaultPermissions: Permissions = {
-  User: ["R"],
-  Order: ["R"],
-  Product: ["R"],
-  Category: ["R"],
-  Report: ["R"],
-};
-
-// Danh sách Users
-const usersInit: User[] = [
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    email: "vana@example.com",
-    phone: "0123456789",
-    district: "Đống Đa",
-    city: 'Hà Nội',
-    status: "Active",
-    permissions: {
-      User: ["R", "C"], // Ví dụ A có thêm quyền Create ở User
-      Order: ["R"],
-      Product: ["R"],
-      Category: ["R"],
-      Report: ["R"],
+  // Danh sách Users
+  const usersInit: User[] = [
+    {
+      id: 1,
+      name: "Nguyễn Văn A",
+      email: "vana@example.com",
+      phone: "0123456789",
+      district: "Đống Đa",
+      city: "Hà Nội",
+      status: "Active",
+      permissions: {
+        User: ["R", "C"], // Ví dụ A có thêm quyền Create ở User
+        Order: ["R"],
+        Product: ["R"],
+        Category: ["R"],
+        Report: ["R"],
+      },
     },
-  },
-  {
-    id: 2,
-    name: "Trần Thị B",
-    email: "thib@example.com",
-    phone: "0987654321",
-    city: "TP.HCM",
-    district: "Đống Đa",
-    status: "Inactive",
-    permissions: defaultPermissions,
-  },
-  {
-    id: 3,
-    name: "Lê Văn C",
-    email: "vanc@example.com",
-    phone: "0911222333",
-    city: "Đà Nẵng",
-    district: "Đống Đa",
-    status: "Active",
-    permissions: defaultPermissions,
-  },
-  {
-    id: 4,
-    name: "Phạm Thị D",
-    email: "thid@example.com",
-    phone: "0933444555",
-    city: "Hải Phòng",
-    district: "Đống Đa",
-    status: "Active",
-    permissions: defaultPermissions,
-  },
-  {
-    id: 5,
-    name: "Hoàng Văn E",
-    email: "vane@example.com",
-    phone: "0955666777",
-    city: "Cần Thơ",
-    district: "Đống Đa",
-    status: "Inactive",
-    permissions: defaultPermissions,
-  },
-  {
-    id: 6,
-    name: "Đỗ Thị F",
-    email: "thif@example.com",
-    phone: "0977888999",
-    city: "Huế",
-    district: "Đống Đa",
-    status: "Active",
-    permissions: defaultPermissions,
-  },
-  {
-    id: 7,
-    name: "Bùi Văn G",
-    email: "vang@example.com",
-    phone: "0909090909",
-    city: "Quảng Ninh",
-    district: "Đống Đa",
-    status: "Inactive",
-    permissions: defaultPermissions,
-  },
-];
-  const [users, setUsers] = useState<User[]>(usersInit)
+    {
+      id: 2,
+      name: "Trần Thị B",
+      email: "thib@example.com",
+      phone: "0987654321",
+      city: "TP.HCM",
+      district: "Đống Đa",
+      status: "Inactive",
+      permissions: defaultPermissions,
+    },
+    {
+      id: 3,
+      name: "Lê Văn C",
+      email: "vanc@example.com",
+      phone: "0911222333",
+      city: "Đà Nẵng",
+      district: "Đống Đa",
+      status: "Active",
+      permissions: defaultPermissions,
+    },
+    {
+      id: 4,
+      name: "Phạm Thị D",
+      email: "thid@example.com",
+      phone: "0933444555",
+      city: "Hải Phòng",
+      district: "Đống Đa",
+      status: "Active",
+      permissions: defaultPermissions,
+    },
+    {
+      id: 5,
+      name: "Hoàng Văn E",
+      email: "vane@example.com",
+      phone: "0955666777",
+      city: "Cần Thơ",
+      district: "Đống Đa",
+      status: "Inactive",
+      permissions: defaultPermissions,
+    },
+    {
+      id: 6,
+      name: "Đỗ Thị F",
+      email: "thif@example.com",
+      phone: "0977888999",
+      city: "Huế",
+      district: "Đống Đa",
+      status: "Active",
+      permissions: defaultPermissions,
+    },
+    {
+      id: 7,
+      name: "Bùi Văn G",
+      email: "vang@example.com",
+      phone: "0909090909",
+      city: "Quảng Ninh",
+      district: "Đống Đa",
+      status: "Inactive",
+      permissions: defaultPermissions,
+    },
+  ];
+  const [users, setUsers] = useState<User[]>(usersInit);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [districts, setDistricts] = useState<string[]>([])
+  const [districts, setDistricts] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
   const [isShowAddress, setIsShowAddress] = useState(false);
 
@@ -141,10 +148,8 @@ const usersInit: User[] = [
       setDistricts(["Quận 1", "Quận 3", "Bình Thạnh"]);
     } else if (city === "Đà Nẵng") {
       setDistricts(["Hải Châu", "Thanh Khê", "Ngũ Hành Sơn"]);
-    }
-    else 
-      setDistricts([]);
-    setSelectedUser({ ...selectedUser, city: city })
+    } else setDistricts([]);
+    setSelectedUser({ ...selectedUser, city: city });
   };
 
   // 🔹 Lấy page từ URL
@@ -153,7 +158,7 @@ const usersInit: User[] = [
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
 
   // Filter user
-  const filteredUsers = useMemo(() => {
+  const filtered = useMemo(() => {
     return users.filter(
       (u) =>
         u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -161,36 +166,6 @@ const usersInit: User[] = [
         u.phone.includes(search)
     );
   }, [users, search]);
-
-  const handleClickDelete = (id: number, name: string) => {
-    Swal.fire({
-      title: `Bạn có chắc muốn xóa nhân viên ${id}-${name}?`,
-      text: "Hành động này không thể hoàn tác!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then(()=> {
-      setUsers((prev)=>prev.filter((user)=>user.id!==id));
-      toast.success("Xóa nhân viên thành công");
-    });
-  };
-
-  const handleUpload = () => {
-    toast.success("Tải từ file thành công!");
-  };
-
-  const handleExportExcel = () => {
-    toast.success("Xuất Excel thành công!");
-  };
-
-  const handleExportPDF = () => {
-    toast.success("Xuất PDF thành công!");
-  };
-
-  const handleDeleteAll = () => {
-    toast.success("Xóa tất cả thành công!");
-  };
 
   const handleClickEdit = (user: any) => {
     setSelectedUser(user);
@@ -204,13 +179,13 @@ const usersInit: User[] = [
       title: "Cập nhật thành công!",
       text: `Nhân viên ${selectedUser?.name} đã được cập nhật.`,
       icon: "success",
-      confirmButtonText: "OK"
+      confirmButtonText: "OK",
     });
     setIsShowAddress(false);
     setDistricts([]);
-    setUsers((prev) => prev.map(u => 
-      u.id === selectedUser.id ? selectedUser : u
-    ));
+    setUsers((prev) =>
+      prev.map((u) => (u.id === selectedUser.id ? selectedUser : u))
+    );
   };
 
   const handleClickPermission = (user: any) => {
@@ -221,21 +196,16 @@ const usersInit: User[] = [
   const handleClickUpdateAddress = () => {
     setIsShowAddress(!isShowAddress);
     handleCityChange(selectedUser.city);
-    if(cities.length > 0)
-      return;
-    setCities([
-      "Hà Nội",
-      "TP. Hồ Chí Minh",
-      "Đà Nẵng",
-    ]);
-  }
+    if (cities.length > 0) return;
+    setCities(["Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng"]);
+  };
 
   // Pagination
-  const totalPages = Math.ceil(filteredUsers.length / currentShow);
-  const paginatedUsers = useMemo(() => {
-    const start = (currentPage - 1) * currentShow;
-    return filteredUsers.slice(start, start + currentShow);
-  }, [filteredUsers, currentShow, currentPage]);
+  const { paginatedData: paginatedUsers, totalPages } = usePagination(
+    filtered,
+    currentPage,
+    currentShow
+  );
 
   return (
     <div>
@@ -282,12 +252,20 @@ const usersInit: User[] = [
         />
         <hr className="text-gray-300 my-4" />
         {/* Search & Filter */}
-        <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
+        <Filter
+          currentShow={currentShow}
+          search={search}
+          setSearch={setSearch}
+        />
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <EmployeeTable handleClickDelete={handleClickDelete} handleClickEdit={handleClickEdit}
-            handleClickPermission={handleClickPermission} paginatedUsers={paginatedUsers}/>
+          <EmployeeTable
+            handleClickDelete={handleClickDelete}
+            handleClickEdit={handleClickEdit}
+            handleClickPermission={handleClickPermission}
+            paginatedUsers={paginatedUsers}
+          />
           {/* Pagination */}
           <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
@@ -308,19 +286,25 @@ const usersInit: User[] = [
             <input
               className="w-full mb-3 p-2 border rounded"
               value={selectedUser?.name || ""}
-              onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
+              onChange={(e) =>
+                setSelectedUser({ ...selectedUser, name: e.target.value })
+              }
               placeholder="Tên"
             />
             <input
               className="w-full mb-3 p-2 border rounded"
               value={selectedUser?.email || ""}
-              onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
+              onChange={(e) =>
+                setSelectedUser({ ...selectedUser, email: e.target.value })
+              }
               placeholder="Email"
             />
             <input
               className="w-full mb-3 p-2 border rounded"
               value={selectedUser?.phone || ""}
-              onChange={(e) => setSelectedUser({ ...selectedUser, phone: e.target.value })}
+              onChange={(e) =>
+                setSelectedUser({ ...selectedUser, phone: e.target.value })
+              }
               placeholder="Số điện thoại"
             />
             <div className="w-full mb-3 p-2 border rounded flex justify-between items-center">
@@ -330,39 +314,51 @@ const usersInit: User[] = [
                 value={`${selectedUser?.district}/${selectedUser?.city}` || ""}
                 placeholder="Địa chỉ"
               />
-              <Edit className="w-5 h-5" onClick={handleClickUpdateAddress}/>
+              <Edit className="w-5 h-5" onClick={handleClickUpdateAddress} />
             </div>
-            {
-              isShowAddress &&
+            {isShowAddress && (
               <select
                 name="city"
                 value={selectedUser?.city}
-                onChange={(e)=>handleCityChange(e.target.value)}
-                className="w-full border rounded px-3 py-2">
+                onChange={(e) => handleCityChange(e.target.value)}
+                className="w-full border rounded px-3 py-2"
+              >
                 <option value="">--Chọn thành phố--</option>
-                {cities.map(c => (
-                  <option key={c} value={c}>{c}</option>
+                {cities.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
                 ))}
               </select>
-            }
-            {
-              isShowAddress && 
+            )}
+            {isShowAddress && (
               <select
                 name="district"
                 value={selectedUser?.district}
-                onChange={(e)=>setSelectedUser({ ...selectedUser, district: e.target.value })}
-                className="w-full border rounded px-3 py-2 mt-3">
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, district: e.target.value })
+                }
+                className="w-full border rounded px-3 py-2 mt-3"
+              >
                 <option value="">--Chọn quận/huyện--</option>
-                {districts.map(c => (
-                  <option key={c} value={c}>{c}</option>
+                {districts.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
                 ))}
               </select>
-            }
+            )}
             <div className="flex justify-end gap-3 mt-3">
-              <button className="px-4 py-2 bg-gray-300 rounded" onClick={() => setIsModalOpen(false)}>
+              <button
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => setIsModalOpen(false)}
+              >
                 Hủy
               </button>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleSave}>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+                onClick={handleSave}
+              >
                 Lưu
               </button>
             </div>

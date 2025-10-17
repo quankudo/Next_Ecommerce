@@ -6,48 +6,27 @@ import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Filter from "@/components/admin/Filter";
 import UserTable from "./UserTable";
-import Swal from "sweetalert2";
-import { toast } from "sonner";
 import { FileDown, FileText, FileUp, Plus, Trash2 } from "lucide-react";
 import ActionButtons from "@/components/admin/ActionButtons";
 import { listUsers } from "@/app/data";
+import { useActionHandler } from "@/hook/useActionHandler";
+import { usePagination } from "@/hook/usePagination";
 
 const Page = () => {
+  const {
+    handleUpload,
+    handleExportExcel,
+    handleExportPDF,
+    handleDeleteAll,
+    handleClickDelete,
+  } = useActionHandler("người dùng");
+
   const [search, setSearch] = useState("");
 
   // 🔹 Lấy page từ URL
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const currentShow = parseInt(searchParams.get("show") || "5", 10);
-
-  const handleUpload = () => {
-    toast.success("Tải từ file thành công!");
-  };
-
-  const handleExportExcel = () => {
-    toast.success("Xuất Excel thành công!");
-  };
-
-  const handleExportPDF = () => {
-    toast.success("Xuất PDF thành công!");
-  };
-
-  const handleDeleteAll = () => {
-    toast.success("Xóa tất cả thành công!");
-  };
-
-  const handleClickDelete = (id: number, name: string) => {
-    Swal.fire({
-      title: `Bạn có chắc muốn xóa người dùng ${id}-${name}?`,
-      text: "Hành động này không thể hoàn tác!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then(()=>{
-      toast.success("Xóa người dùng thành công");
-    });
-  };
 
   // Filter user
   const filteredUsers = useMemo(() => {
@@ -60,11 +39,11 @@ const Page = () => {
   }, [listUsers, search]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredUsers.length / currentShow);
-  const paginatedUsers = useMemo(() => {
-    const start = (currentPage - 1) * currentShow;
-    return filteredUsers.slice(start, start + currentShow);
-  }, [filteredUsers, currentShow, currentPage]);
+  const { paginatedData: paginatedUsers, totalPages } = usePagination(
+    filteredUsers,
+    currentPage,
+    currentShow
+  );
   return (
     <div>
       <SectionHeading text="Quản lý người dùng" />
@@ -110,17 +89,25 @@ const Page = () => {
         />
         <hr className="text-gray-300 my-4" />
         {/* Search & Filter */}
-        <Filter currentShow={currentShow} search={search} setSearch={setSearch} />
+        <Filter currentShow={currentShow} search={search} setSearch={setSearch}>
+          <select>
+            <option value="">1</option>
+            <option value="">1</option>
+            <option value="">1</option>
+            <option value="">1</option>
+          </select>
+          {/* co nhieu filter con o day */}
+        </Filter>
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
-          <UserTable paginatedUsers={paginatedUsers} handleClickDelete={handleClickDelete}/>
+          <UserTable
+            paginatedUsers={paginatedUsers}
+            handleClickDelete={handleClickDelete}
+          />
 
           {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       </div>
     </div>

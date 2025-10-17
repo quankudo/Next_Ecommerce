@@ -2,7 +2,7 @@ export const formatCurrency = (amount: number): string => {
   return amount
     .toLocaleString("vi-VN", { style: "currency", currency: "VND" })
     .replace(/\./g, ",");
-}
+};
 
 export const truncateByWord = (text: string, maxLength: number) => {
   if (text.length <= maxLength) return text;
@@ -18,9 +18,3 @@ export const truncateByWord = (text: string, maxLength: number) => {
 
   return truncated + "...";
 };
-
-// Ví dụ
-console.log(truncateByWord("bạn là lập trình viên Frontend", 10));
-// 👉 "bạn là..."
-
-
